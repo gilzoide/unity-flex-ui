@@ -1,0 +1,12 @@
+{
+  "name": "com.gilzoide.flex-ui",
+  "displayName": "Flex UI",
+  "version": "1.0.0-preview1",
+  "description": "Flexbox components for Unity GUI",
+  "homepage": "https://github.com/gilzoide/unity-flex-ui",
+  "license": "Unlicense",
+  "author": {
+    "name": "Gil Barbosa Reis"
+  },
+  "unity": "2017.1"
+}
