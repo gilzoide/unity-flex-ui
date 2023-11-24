@@ -10,3 +10,7 @@ insert_final_newline = true
 
 [*.{asmdef,cs}]
 indent_size = 4
+
+[Makefile]
+indent_style = tab
+indent_size = 8
