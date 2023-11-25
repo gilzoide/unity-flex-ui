@@ -130,24 +130,6 @@ namespace Gilzoide.FlexUi
             }
         }
 
-        public void RefreshLayout()
-        {
-            if (IsRootLayoutNode)
-            {
-                Rect rect = RectTransform.rect;
-                LayoutNode.CalculateLayout(rect.width, rect.height, _direction);
-            }
-            else
-            {
-                LayoutNode.ApplyTo(RectTransform);
-            }
-
-            foreach (FlexLayout child in _childrenNodes)
-            {
-                child.RefreshLayout();
-            }
-        }
-
         public void ClearTrackedChildren()
         {
             _drivenRectTransformTracker.Clear();
@@ -187,11 +169,34 @@ namespace Gilzoide.FlexUi
             }
         }
 
+        public void RefreshRootLayout()
+        {
+            RootLayoutNode.RefreshLayout();
+        }
+
         public int Compare(FlexLayout x, FlexLayout y)
         {
             int xSibling = x ? x.RectTransform.GetSiblingIndex() : -1;
             int ySibling = y ? y.RectTransform.GetSiblingIndex() : -1;
             return xSibling.CompareTo(ySibling);
+        }
+
+        protected void RefreshLayout()
+        {
+            if (IsRootLayoutNode)
+            {
+                Rect rect = RectTransform.rect;
+                LayoutNode.CalculateLayout(rect.width, rect.height, _direction);
+            }
+            else
+            {
+                LayoutNode.ApplyTo(RectTransform);
+            }
+
+            foreach (FlexLayout child in _childrenNodes)
+            {
+                child.RefreshLayout();
+            }
         }
 
         protected void UpdateNodeStyle()
@@ -277,7 +282,7 @@ namespace Gilzoide.FlexUi
             if (this)
             {
                 UpdateNodeStyle();
-                RootLayoutNode.RefreshLayout();
+                RefreshRootLayout();
             }
         }
 #endif
