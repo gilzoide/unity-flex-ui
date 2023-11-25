@@ -11,8 +11,12 @@ $(BUILD_DIRS):
 
 
 # Windows
+yoga~/build/windows/%/libyogacore.a: CMAKE_FLAGS = \
+	-DCMAKE_BUILD_TYPE=Release \
+	-DCMAKE_CXX_FLAGS="$(CXXFLAGS)" \
+	-DCMAKE_CXX_COMPILER="$(CXX)"
 yoga~/build/windows/%/libyogacore.a:
-	$(CMAKE_BIN) -S yoga~/yoga -B $(dir $@) -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS="$(CXXFLAGS)" -DCMAKE_CXX_COMPILER="$(CXX)"
+	$(CMAKE_BIN) -S yoga~/yoga -B $(dir $@) $(CMAKE_FLAGS)
 	$(CMAKE_BIN) --build $(dir $@)
 
 windows/%/flex-ui.dll: LINKFLAGS += -shared
@@ -24,8 +28,11 @@ windows/x86/flex-ui.dll: CXX = i686-w64-mingw32-c++
 
 
 # Linux
+yoga~/build/linux/%/libyogacore.a: CMAKE_FLAGS = \
+	-DCMAKE_BUILD_TYPE=Release \
+	-DCMAKE_CXX_FLAGS="$(CXXFLAGS)"
 yoga~/build/linux/%/libyogacore.a:
-	$(CMAKE_BIN) -S yoga~/yoga -B $(dir $@) -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS="$(CXXFLAGS)"
+	$(CMAKE_BIN) -S yoga~/yoga -B $(dir $@) $(CMAKE_FLAGS)
 	$(CMAKE_BIN) --build $(dir $@)
 
 linux/%/flex-ui.so: CXXFLAGS += -fPIC
@@ -37,8 +44,11 @@ linux/x86/flex-ui.so: CXXFLAGS += -m32
 
 
 # macOS
+yoga~/build/macos/libyogacore.a: CMAKE_FLAGS = \
+	-DCMAKE_BUILD_TYPE=Release \
+	-DCMAKE_OSX_ARCHITECTURES="arm64;x86_64"
 yoga~/build/macos/libyogacore.a:
-	$(CMAKE_BIN) -S yoga~/yoga -B $(dir $@) -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64" -DCMAKE_BUILD_TYPE=Release
+	$(CMAKE_BIN) -S yoga~/yoga -B $(dir $@) $(CMAKE_FLAGS)
 	$(CMAKE_BIN) --build $(dir $@)
 
 osx/flex-ui.dylib: CXXFLAGS += -arch x86_64 -arch arm64
@@ -48,7 +58,8 @@ osx/flex-ui.dylib: yoga~/build/macos/libyogacore.a | osx
 
 
 # iOS
-yoga~/build/ios/libyogacore.a: CMAKE_FLAGS = -DCMAKE_OSX_ARCHITECTURES="arm64" \
+yoga~/build/ios/libyogacore.a: CMAKE_FLAGS = \
+	-DCMAKE_OSX_ARCHITECTURES="arm64" \
 	-DCMAKE_BUILD_TYPE=Release \
 	-DCMAKE_OSX_SYSROOT=iphoneos
 yoga~/build/ios/libyogacore.a:
