@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using Gilzoide.FlexUi.Yoga;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -104,11 +103,6 @@ namespace Gilzoide.FlexUi
 
         public void SetLayoutVertical()
         {
-            if (!IsRootLayoutNode)
-            {
-                return;
-            }
-
             foreach (FlexLayout child in _childrenNodes)
             {
                 child.ApplyLayout();
