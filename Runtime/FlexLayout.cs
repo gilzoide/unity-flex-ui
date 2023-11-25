@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Gilzoide.FlexUi.Yoga;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -101,6 +102,12 @@ namespace Gilzoide.FlexUi
         protected override void OnEnable()
         {
             base.OnEnable();
+#if UNITY_EDITOR
+            if (BuildPipeline.isBuildingPlayer)
+            {
+                return;
+            }
+#endif
             RefreshParent();
             RefreshChildren();
         }
