@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Gilzoide.FlexUi.Yoga;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,18 +11,18 @@ namespace Gilzoide.FlexUi
     public class FlexLayout : MonoBehaviour, ILayoutGroup
     {
         [Header("Flex")]
-        [SerializeField] private Direction _direction;
-        [SerializeField] private FlexDirection _flexDirection;
-        [SerializeField] private Wrap _flexWrap;
+        [SerializeField] private Direction _direction = Direction.Inherit;
+        [SerializeField] private FlexDirection _flexDirection = FlexDirection.Row;
+        [SerializeField] private Wrap _flexWrap = Wrap.Wrap;
         [SerializeField] private YGValue _flexBasis = YGValue.Auto;
         [SerializeField, Min(0)] private float _flexGrow = 0;
         [SerializeField, Min(0)] private float _flexShrink = 1;
 
         [Header("Alignment")]
-        [SerializeField] private Justify _justifyContent;
-        [SerializeField] private Align _alignItems;
-        [SerializeField] private Align _alignSelf;
-        [SerializeField] private Align _alignContent;
+        [SerializeField] private Justify _justifyContent = Justify.FlexStart;
+        [SerializeField] private Align _alignItems = Align.Auto;
+        [SerializeField] private Align _alignSelf = Align.Auto;
+        [SerializeField] private Align _alignContent = Align.Auto;
 
         [Header("Layout")]
         [SerializeField] private YGValue _width = YGValue.Auto;
@@ -30,27 +31,23 @@ namespace Gilzoide.FlexUi
         [SerializeField] private YGValue _minHeight = YGValue.Undefined;
         [SerializeField] private YGValue _maxWidth = YGValue.Undefined;
         [SerializeField] private YGValue _maxHeight = YGValue.Undefined;
-        [SerializeField, Min(0)] private float _aspectRatio = 0;
+        [SerializeField] private YGValue _aspectRatio = YGValue.Undefined;
 
-        public bool IsRootLayoutNode => LayoutNode.GetOwner().IsNull;
-        public RectTransform RootLayoutNode
+        public bool IsRootLayoutNode => _parentNode == null;
+        public FlexLayout RootLayoutNode
         {
             get
             {
-                YGNode node = LayoutNode;
-                Transform nodeTransform = transform;
-                while (true)
+                FlexLayout node = this;
+                while (!node.IsRootLayoutNode)
                 {
-                    YGNode owner = node.GetOwner();
-                    if (owner.IsNull)
-                    {
-                        return nodeTransform as RectTransform;
-                    }
-                    node = owner;
-                    nodeTransform = nodeTransform.parent;
+                    node = node._parentNode;
                 }
+                return node;
             }
         }
+
+        public RectTransform RectTransform { get; private set; }
 
         protected YGNode LayoutNode
         {
@@ -58,18 +55,21 @@ namespace Gilzoide.FlexUi
             {
                 if (_layoutNode.IsNull)
                 {
-                    _layoutNode = YGNode.Create();
+                    _layoutNode.Instantiate();
                     UpdateNodeStyle();
                 }
                 return _layoutNode;
             }
         }
         private YGNode _layoutNode;
-        private readonly Dictionary<RectTransform, YGNode> _childrenLayoutMap = new Dictionary<RectTransform, YGNode>();
+        private FlexLayout _parentNode;
+        private readonly List<FlexLayout> _childrenNodes = new List<FlexLayout>();
         private DrivenRectTransformTracker _drivenRectTransformTracker = new DrivenRectTransformTracker();
-        private Rect _rect;
 
-        public RectTransform SelfRectTransform => (RectTransform) transform;
+        void Awake()
+        {
+            RectTransform = transform as RectTransform;
+        }
 
         void OnEnable()
         {
@@ -88,10 +88,7 @@ namespace Gilzoide.FlexUi
 
         void OnTransformChildrenChanged()
         {
-            if (isActiveAndEnabled)
-            {
-                RefreshTrackedChildren();
-            }
+            RefreshTrackedChildren();
         }
 
         public void SetLayoutHorizontal()
@@ -101,8 +98,8 @@ namespace Gilzoide.FlexUi
                 return;
             }
 
-            _rect = SelfRectTransform.rect;
-            LayoutNode.CalculateLayout(_rect.width, _rect.height, Direction.Inherit);
+            Rect rect = RectTransform.rect;
+            LayoutNode.CalculateLayout(rect.width, rect.height, _direction);
         }
 
         public void SetLayoutVertical()
@@ -112,16 +109,25 @@ namespace Gilzoide.FlexUi
                 return;
             }
 
-            foreach ((RectTransform child, YGNode layout) in _childrenLayoutMap)
+            foreach (FlexLayout child in _childrenNodes)
             {
-                layout.ApplyTo(child);
+                child.ApplyLayout();
             }
         }
 
         public void ClearTrackedChildren()
         {
             _drivenRectTransformTracker.Clear();
-            _childrenLayoutMap.Clear();
+
+            foreach (FlexLayout child in _childrenNodes)
+            {
+                if (child && child._parentNode == this)
+                {
+                    child._parentNode = null;
+                }
+            }
+            _childrenNodes.Clear();
+
             if (!_layoutNode.IsNull)
             {
                 _layoutNode.RemoveAllChildren();
@@ -131,6 +137,10 @@ namespace Gilzoide.FlexUi
         public void RefreshTrackedChildren()
         {
             ClearTrackedChildren();
+            if (!isActiveAndEnabled)
+            {
+                return;
+            }
 
             int childIndex = 0;
             foreach (Transform child in transform)
@@ -143,14 +153,14 @@ namespace Gilzoide.FlexUi
 
                 _drivenRectTransformTracker.Add(this, rectTransform, DrivenTransformProperties.Anchors | DrivenTransformProperties.AnchoredPosition | DrivenTransformProperties.SizeDelta);
 
-                YGNode childNode = childLayout.LayoutNode;
-                _layoutNode.InsertChild(childNode, childIndex);
-                _childrenLayoutMap[rectTransform] = childNode;
+                childLayout._parentNode = this;
+                _childrenNodes.Add(childLayout);
+                LayoutNode.InsertChild(childLayout.LayoutNode, childIndex);
 
                 childIndex++;
             }
 
-            LayoutRebuilder.MarkLayoutForRebuild(SelfRectTransform);
+            LayoutRebuilder.MarkLayoutForRebuild(RootLayoutNode.RectTransform);
         }
 
         protected void UpdateNodeStyle()
@@ -175,14 +185,19 @@ namespace Gilzoide.FlexUi
             layoutNode.StyleSetMinHeight(_minHeight);
             layoutNode.StyleSetMaxWidth(_maxWidth);
             layoutNode.StyleSetMaxHeight(_maxHeight);
-            layoutNode.StyleSetAspectRatio(_aspectRatio);
+            layoutNode.StyleSetAspectRatio(_aspectRatio.Value);
+        }
+
+        protected void ApplyLayout()
+        {
+            LayoutNode.ApplyTo(RectTransform);
         }
 
 #if UNITY_EDITOR
         private void OnValidate()
         {
             UpdateNodeStyle();
-            LayoutRebuilder.MarkLayoutForRebuild(RootLayoutNode);
+            LayoutRebuilder.MarkLayoutForRebuild(RootLayoutNode.RectTransform);
         }
 #endif
     }

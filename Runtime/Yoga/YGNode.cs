@@ -7,12 +7,9 @@ namespace Gilzoide.FlexUi.Yoga
     {
         private IntPtr _nodePtr;
 
-        public static YGNode Create()
+        public void Instantiate()
         {
-            return new YGNode
-            {
-                _nodePtr = Yoga.YGNodeNew(),
-            };
+            _nodePtr = Yoga.YGNodeNew();
         }
 
         public void Dispose()
