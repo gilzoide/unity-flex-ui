@@ -5,7 +5,7 @@ namespace Gilzoide.FlexUi.Yoga
 {
     public class Yoga
     {
-        const string YogaDll = "flex-ui";
+        const string YogaDll = "yogacore";
 
         #region YGNode
 
