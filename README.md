@@ -6,7 +6,7 @@ Flexible layout support for [Unity UI](https://docs.unity3d.com/Packages/com.uni
 - There is a single component you need: [FlexLayout](Runtime/FlexLayout.cs)
 - `FlexLayout` only layouts children that also have a `FlexLayout` component, so you can still use anchors and other Layout Elements.
 - Live updates in edit mode.
-- Supported platforms: Windows, Linux and macOS
+- Supported platforms: Windows, Linux, macOS and iOS
 
 
 ## How to install

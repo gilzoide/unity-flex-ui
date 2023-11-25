@@ -3,7 +3,7 @@ CMAKE_BIN ?= cmake
 BUILD_DIRS = \
 	windows/x86_64 windows/x86 \
 	linux/x86_64 linux/x86 \
-	osx
+	osx ios
 
 # Misc
 $(BUILD_DIRS):
@@ -47,9 +47,25 @@ osx/flex-ui.dylib: yoga~/build/macos/libyogacore.a | osx
 	$(CXX) -o $@ $< $(CXXFLAGS) $(LINKFLAGS)
 
 
+# iOS
+yoga~/build/ios/libyogacore.a: CMAKE_FLAGS = -DCMAKE_OSX_ARCHITECTURES="arm64" \
+	-DCMAKE_BUILD_TYPE=Release \
+	-DCMAKE_OSX_SYSROOT=iphoneos
+yoga~/build/ios/libyogacore.a:
+	$(CMAKE_BIN) -S yoga~/yoga -B $(dir $@) $(CMAKE_FLAGS)
+	$(CMAKE_BIN) --build $(dir $@)
+
+ios/flex-ui.dylib: CXXFLAGS += -arch arm64 -isysroot $(shell xcrun --sdk iphoneos --show-sdk-path)
+ios/flex-ui.dylib: LINKFLAGS += -shared -Wl,-all_load
+ios/flex-ui.dylib: yoga~/build/ios/libyogacore.a | ios
+	$(CXX) -o $@ $< $(CXXFLAGS) $(LINKFLAGS)
+
+
+
 # Targets
 windows64: windows/x86_64/flex-ui.dll
 windows32: windows/x86/flex-ui.dll
 linux64: linux/x86_64/flex-ui.so
 linux32: linux/x86/flex-ui.so
-macos: osx/flex-ui.dylib
+macos64: osx/flex-ui.dylib
+ios64: ios/flex-ui.dylib
