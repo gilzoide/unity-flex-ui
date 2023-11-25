@@ -85,6 +85,282 @@ namespace Gilzoide.FlexUi
             }
         }
 
+        #region Property getters/setters
+
+        public PositionType PositionType
+        {
+            get => _positionType;
+            set
+            {
+                _positionType = value;
+                RefreshRootLayout();
+            }
+        }
+        public YGValue PositionLeft
+        {
+            get => _positionLeft;
+            set
+            {
+                _positionLeft = value;
+                RefreshRootLayout();
+            }
+        }
+        public YGValue PositionTop
+        {
+            get => _positionTop;
+            set
+            {
+                _positionTop = value;
+                RefreshRootLayout();
+            }
+        }
+        public YGValue PositionRight
+        {
+            get => _positionRight;
+            set
+            {
+                _positionRight = value;
+                RefreshRootLayout();
+            }
+        }
+        public YGValue PositionBottom
+        {
+            get => _positionBottom;
+            set
+            {
+                _positionBottom = value;
+                RefreshRootLayout();
+            }
+        }
+        public Direction Direction
+        {
+            get => _direction;
+            set
+            {
+                _direction = value;
+                RefreshRootLayout();
+            }
+        }
+        public FlexDirection FlexDirection
+        {
+            get => _flexDirection;
+            set
+            {
+                _flexDirection = value;
+                RefreshRootLayout();
+            }
+        }
+        public Wrap FlexWrap
+        {
+            get => _flexWrap;
+            set
+            {
+                _flexWrap = value;
+                RefreshRootLayout();
+            }
+        }
+        public YGValue FlexBasis
+        {
+            get => _flexBasis;
+            set
+            {
+                _flexBasis = value;
+                RefreshRootLayout();
+            }
+        }
+        public float FlexGrow
+        {
+            get => _flexGrow;
+            set
+            {
+                _flexGrow = value;
+                RefreshRootLayout();
+            }
+        }
+        public float FlexShrink
+        {
+            get => _flexShrink;
+            set
+            {
+                _flexShrink = value;
+                RefreshRootLayout();
+            }
+        }
+        public Justify JustifyContent
+        {
+            get => _justifyContent;
+            set
+            {
+                _justifyContent = value;
+                RefreshRootLayout();
+            }
+        }
+        public Align AlignItems
+        {
+            get => _alignItems;
+            set
+            {
+                _alignItems = value;
+                RefreshRootLayout();
+            }
+        }
+        public Align AlignSelf
+        {
+            get => _alignSelf;
+            set
+            {
+                _alignSelf = value;
+                RefreshRootLayout();
+            }
+        }
+        public Align AlignContent
+        {
+            get => _alignContent;
+            set
+            {
+                _alignContent = value;
+                RefreshRootLayout();
+            }
+        }
+        public YGValue Width
+        {
+            get => _width;
+            set
+            {
+                _width = value;
+                RefreshRootLayout();
+            }
+        }
+        public YGValue Height
+        {
+            get => _height;
+            set
+            {
+                _height = value;
+                RefreshRootLayout();
+            }
+        }
+        public YGValue MinWidth
+        {
+            get => _minWidth;
+            set
+            {
+                _minWidth = value;
+                RefreshRootLayout();
+            }
+        }
+        public YGValue MinHeight
+        {
+            get => _minHeight;
+            set
+            {
+                _minHeight = value;
+                RefreshRootLayout();
+            }
+        }
+        public YGValue MaxWidth
+        {
+            get => _maxWidth;
+            set
+            {
+                _maxWidth = value;
+                RefreshRootLayout();
+            }
+        }
+        public YGValue MaxHeight
+        {
+            get => _maxHeight;
+            set
+            {
+                _maxHeight = value;
+                RefreshRootLayout();
+            }
+        }
+        public YGValue AspectRatio
+        {
+            get => _aspectRatio;
+            set
+            {
+                _aspectRatio = value;
+                RefreshRootLayout();
+            }
+        }
+        public YGValue MarginLeft
+        {
+            get => _marginLeft;
+            set
+            {
+                _marginLeft = value;
+                RefreshRootLayout();
+            }
+        }
+        public YGValue MarginTop
+        {
+            get => _marginTop;
+            set
+            {
+                _marginTop = value;
+                RefreshRootLayout();
+            }
+        }
+        public YGValue MarginRight
+        {
+            get => _marginRight;
+            set
+            {
+                _marginRight = value;
+                RefreshRootLayout();
+            }
+        }
+        public YGValue MarginBottom
+        {
+            get => _marginBottom;
+            set
+            {
+                _marginBottom = value;
+                RefreshRootLayout();
+            }
+        }
+
+        public YGValue PaddingLeft
+        {
+            get => _paddingLeft;
+            set
+            {
+                _paddingLeft = value;
+                RefreshRootLayout();
+            }
+        }
+        public YGValue PaddingTop
+        {
+            get => _paddingTop;
+            set
+            {
+                _paddingTop = value;
+                RefreshRootLayout();
+            }
+        }
+        public YGValue PaddingRight
+        {
+            get => _paddingRight;
+            set
+            {
+                _paddingRight = value;
+                RefreshRootLayout();
+            }
+        }
+        public YGValue PaddingBottom
+        {
+            get => _paddingBottom;
+            set
+            {
+                _paddingBottom = value;
+                RefreshRootLayout();
+            }
+        }
+
+        #endregion
+
         protected YGNode LayoutNode
         {
             get
