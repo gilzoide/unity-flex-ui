@@ -102,10 +102,7 @@ namespace Gilzoide.FlexUi
         protected override void OnDisable()
         {
             base.OnDisable();
-            if (_parentNode)
-            {
-                _parentNode.UntrackChild(this);
-            }
+            ClearParent();
             ClearTrackedChildren();
         }
 
@@ -127,45 +124,6 @@ namespace Gilzoide.FlexUi
             if (IsActive() && IsRootLayoutNode)
             {
                 RefreshLayout();
-            }
-        }
-
-        public void ClearTrackedChildren()
-        {
-            _drivenRectTransformTracker.Clear();
-
-            foreach (FlexLayout child in _childrenNodes)
-            {
-                if (child && child._parentNode == this)
-                {
-                    child._parentNode = null;
-                }
-            }
-            _childrenNodes.Clear();
-
-            if (!_layoutNode.IsNull)
-            {
-                _layoutNode.RemoveAllChildren();
-            }
-        }
-
-        public void RefreshParent()
-        {
-            Transform parent = RectTransform.parent;
-            if (parent && parent.TryGetComponent(out FlexLayout parentNode))
-            {
-                if (parentNode != _parentNode)
-                {
-                    if (_parentNode)
-                    {
-                        _parentNode.UntrackChild(this);
-                    }
-                    parentNode.TrackChild(this);
-                }
-            }
-            else
-            {
-                _parentNode = null;
             }
         }
 
@@ -240,6 +198,34 @@ namespace Gilzoide.FlexUi
             layoutNode.StyleSetPadding(Edge.Bottom, _paddingBottom);
         }
 
+        protected void RefreshParent()
+        {
+            Transform parent = RectTransform.parent;
+            if (parent && parent.TryGetComponent(out FlexLayout parentNode))
+            {
+                if (parentNode != _parentNode)
+                {
+                    if (_parentNode)
+                    {
+                        _parentNode.UntrackChild(this);
+                    }
+                    parentNode.TrackChild(this);
+                }
+            }
+            else
+            {
+                _parentNode = null;
+            }
+        }
+
+        protected void ClearParent()
+        {
+            if (_parentNode)
+            {
+                _parentNode.UntrackChild(this);
+            }
+        }
+
         protected void TrackChild(FlexLayout child)
         {
             child._parentNode = this;
@@ -271,6 +257,25 @@ namespace Gilzoide.FlexUi
             foreach (FlexLayout child in _childrenNodes)
             {
                 _drivenRectTransformTracker.Add(this, child.RectTransform, DrivenRectTransformProperties);
+            }
+        }
+
+        protected void ClearTrackedChildren()
+        {
+            _drivenRectTransformTracker.Clear();
+
+            foreach (FlexLayout child in _childrenNodes)
+            {
+                if (child && child._parentNode == this)
+                {
+                    child._parentNode = null;
+                }
+            }
+            _childrenNodes.Clear();
+
+            if (!_layoutNode.IsNull)
+            {
+                _layoutNode.RemoveAllChildren();
             }
         }
 
