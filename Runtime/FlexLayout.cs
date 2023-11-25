@@ -54,6 +54,10 @@ namespace Gilzoide.FlexUi
         [SerializeField] private YGValue _paddingRight = YGValue.Zero;
         [SerializeField] private YGValue _paddingBottom = YGValue.Zero;
 
+#if UNITY_EDITOR || !UNITY_2021_2_OR_NEWER
+        [SerializeField, HideInInspector] internal bool[] _foldoutState = { false, false, false, false, false, false };
+#endif
+
         public bool IsRootLayoutNode => _parentNode == null;
         public FlexLayout RootLayoutNode
         {

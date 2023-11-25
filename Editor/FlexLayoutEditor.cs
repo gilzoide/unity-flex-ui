@@ -1,29 +1,13 @@
-using System.Collections.Generic;
 using System.Reflection;
 using UnityEditor;
 
 namespace Gilzoide.FlexUi.Editor
 {
+    [CanEditMultipleObjects]
     [CustomEditor(typeof(FlexLayout))]
     public class FlexLayoutEditor : UnityEditor.Editor
     {
-        private static List<bool> _foldoutState = new List<bool>();
-
-        void OnEnable()
-        {
-            int foldoutIndex = -1;
-            foreach (FieldInfo fieldInfo in typeof(FlexLayout).GetFields(BindingFlags.Instance | BindingFlags.NonPublic))
-            {
-                if (fieldInfo.GetCustomAttribute<FoldoutHeaderAttribute>() != null)
-                {
-                    foldoutIndex++;
-                    if (_foldoutState.Count <= foldoutIndex)
-                    {
-                        _foldoutState.Add(false);
-                    }
-                }
-            }
-        }
+        private bool[] FoldoutState => ((FlexLayout) serializedObject.targetObject)._foldoutState;
 
         public override void OnInspectorGUI()
         {
@@ -47,11 +31,13 @@ namespace Gilzoide.FlexUi.Editor
                 {
                     EditorGUI.indentLevel--;
                     foldoutIndex++;
-                    _foldoutState[foldoutIndex] = EditorGUILayout.Foldout(_foldoutState[foldoutIndex], foldoutHeader.Title, true);
+                    bool foldout = GetFoldoutState(foldoutIndex);
+                    foldout = EditorGUILayout.Foldout(foldout, foldoutHeader.Title, true);
+                    SetFoldoutState(foldoutIndex, foldout);
                     EditorGUI.indentLevel++;
                 }
 
-                if (_foldoutState[foldoutIndex])
+                if (FoldoutState[foldoutIndex])
                 {
                     EditorGUILayout.PropertyField(property, true);
                 }
@@ -59,6 +45,18 @@ namespace Gilzoide.FlexUi.Editor
             EditorGUI.indentLevel++;
 
             serializedObject.ApplyModifiedProperties();
+        }
+
+        private void SetFoldoutState(int index, bool value)
+        {
+            SerializedProperty foldoutProperty = serializedObject.FindProperty(nameof(FlexLayout._foldoutState));
+            foldoutProperty.GetArrayElementAtIndex(index).boolValue = value;
+        }
+
+        private bool GetFoldoutState(int index)
+        {
+            SerializedProperty foldoutProperty = serializedObject.FindProperty(nameof(FlexLayout._foldoutState));
+            return foldoutProperty.GetArrayElementAtIndex(index).boolValue;
         }
     }
 }
