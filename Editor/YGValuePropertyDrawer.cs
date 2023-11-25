@@ -37,6 +37,11 @@ namespace Gilzoide.FlexUi.Editor
 
         private static string GetValueAsString(SerializedProperty property)
         {
+            if (property.hasMultipleDifferentValues)
+            {
+                return "—";
+            }
+
             int unit = property.FindPropertyRelative(nameof(YGValue.Unit)).enumValueIndex;
             float value = property.FindPropertyRelative(nameof(YGValue.Value)).floatValue;
             switch ((Unit) unit)
