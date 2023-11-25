@@ -93,6 +93,7 @@ namespace Gilzoide.FlexUi
             set
             {
                 _positionType = value;
+                LayoutNode.StyleSetPositionType(value);
                 RefreshRootLayout();
             }
         }
@@ -102,6 +103,7 @@ namespace Gilzoide.FlexUi
             set
             {
                 _positionLeft = value;
+                LayoutNode.StyleSetPosition(Edge.Left, value);
                 RefreshRootLayout();
             }
         }
@@ -111,6 +113,7 @@ namespace Gilzoide.FlexUi
             set
             {
                 _positionTop = value;
+                LayoutNode.StyleSetPosition(Edge.Top, value);
                 RefreshRootLayout();
             }
         }
@@ -120,6 +123,7 @@ namespace Gilzoide.FlexUi
             set
             {
                 _positionRight = value;
+                LayoutNode.StyleSetPosition(Edge.Right, value);
                 RefreshRootLayout();
             }
         }
@@ -129,6 +133,7 @@ namespace Gilzoide.FlexUi
             set
             {
                 _positionBottom = value;
+                LayoutNode.StyleSetPosition(Edge.Bottom, value);
                 RefreshRootLayout();
             }
         }
@@ -138,6 +143,7 @@ namespace Gilzoide.FlexUi
             set
             {
                 _direction = value;
+                LayoutNode.StyleSetDirection(value);
                 RefreshRootLayout();
             }
         }
@@ -147,6 +153,7 @@ namespace Gilzoide.FlexUi
             set
             {
                 _flexDirection = value;
+                LayoutNode.StyleSetFlexDirection(value);
                 RefreshRootLayout();
             }
         }
@@ -156,6 +163,7 @@ namespace Gilzoide.FlexUi
             set
             {
                 _flexWrap = value;
+                LayoutNode.StyleSetFlexWrap(value);
                 RefreshRootLayout();
             }
         }
@@ -165,6 +173,7 @@ namespace Gilzoide.FlexUi
             set
             {
                 _flexBasis = value;
+                LayoutNode.StyleSetFlexBasis(value);
                 RefreshRootLayout();
             }
         }
@@ -174,6 +183,7 @@ namespace Gilzoide.FlexUi
             set
             {
                 _flexGrow = value;
+                LayoutNode.StyleSetFlexGrow(value);
                 RefreshRootLayout();
             }
         }
@@ -183,6 +193,7 @@ namespace Gilzoide.FlexUi
             set
             {
                 _flexShrink = value;
+                LayoutNode.StyleSetFlexShrink(value);
                 RefreshRootLayout();
             }
         }
@@ -192,6 +203,7 @@ namespace Gilzoide.FlexUi
             set
             {
                 _justifyContent = value;
+                LayoutNode.StyleSetJustifyContent(value);
                 RefreshRootLayout();
             }
         }
@@ -201,6 +213,7 @@ namespace Gilzoide.FlexUi
             set
             {
                 _alignItems = value;
+                LayoutNode.StyleSetAlignItems(value);
                 RefreshRootLayout();
             }
         }
@@ -210,6 +223,7 @@ namespace Gilzoide.FlexUi
             set
             {
                 _alignSelf = value;
+                LayoutNode.StyleSetAlignSelf(value);
                 RefreshRootLayout();
             }
         }
@@ -219,6 +233,7 @@ namespace Gilzoide.FlexUi
             set
             {
                 _alignContent = value;
+                LayoutNode.StyleSetAlignContent(value);
                 RefreshRootLayout();
             }
         }
@@ -228,6 +243,7 @@ namespace Gilzoide.FlexUi
             set
             {
                 _width = value;
+                LayoutNode.StyleSetWidth(value);
                 RefreshRootLayout();
             }
         }
@@ -237,6 +253,7 @@ namespace Gilzoide.FlexUi
             set
             {
                 _height = value;
+                LayoutNode.StyleSetHeight(value);
                 RefreshRootLayout();
             }
         }
@@ -246,6 +263,7 @@ namespace Gilzoide.FlexUi
             set
             {
                 _minWidth = value;
+                LayoutNode.StyleSetMinWidth(value);
                 RefreshRootLayout();
             }
         }
@@ -255,6 +273,7 @@ namespace Gilzoide.FlexUi
             set
             {
                 _minHeight = value;
+                LayoutNode.StyleSetMinHeight(value);
                 RefreshRootLayout();
             }
         }
@@ -264,6 +283,7 @@ namespace Gilzoide.FlexUi
             set
             {
                 _maxWidth = value;
+                LayoutNode.StyleSetMaxWidth(value);
                 RefreshRootLayout();
             }
         }
@@ -273,6 +293,7 @@ namespace Gilzoide.FlexUi
             set
             {
                 _maxHeight = value;
+                LayoutNode.StyleSetMaxHeight(value);
                 RefreshRootLayout();
             }
         }
@@ -282,6 +303,7 @@ namespace Gilzoide.FlexUi
             set
             {
                 _aspectRatio = value;
+                LayoutNode.StyleSetAspectRatio(value.Value);
                 RefreshRootLayout();
             }
         }
@@ -291,6 +313,7 @@ namespace Gilzoide.FlexUi
             set
             {
                 _marginLeft = value;
+                LayoutNode.StyleSetMargin(Edge.Left, value);
                 RefreshRootLayout();
             }
         }
@@ -300,6 +323,7 @@ namespace Gilzoide.FlexUi
             set
             {
                 _marginTop = value;
+                LayoutNode.StyleSetMargin(Edge.Top, value);
                 RefreshRootLayout();
             }
         }
@@ -309,6 +333,7 @@ namespace Gilzoide.FlexUi
             set
             {
                 _marginRight = value;
+                LayoutNode.StyleSetMargin(Edge.Right, value);
                 RefreshRootLayout();
             }
         }
@@ -318,6 +343,7 @@ namespace Gilzoide.FlexUi
             set
             {
                 _marginBottom = value;
+                LayoutNode.StyleSetMargin(Edge.Bottom, value);
                 RefreshRootLayout();
             }
         }
@@ -328,6 +354,7 @@ namespace Gilzoide.FlexUi
             set
             {
                 _paddingLeft = value;
+                LayoutNode.StyleSetPadding(Edge.Left, value);
                 RefreshRootLayout();
             }
         }
@@ -337,6 +364,7 @@ namespace Gilzoide.FlexUi
             set
             {
                 _paddingTop = value;
+                LayoutNode.StyleSetPadding(Edge.Top, value);
                 RefreshRootLayout();
             }
         }
@@ -346,6 +374,7 @@ namespace Gilzoide.FlexUi
             set
             {
                 _paddingRight = value;
+                LayoutNode.StyleSetPadding(Edge.Right, value);
                 RefreshRootLayout();
             }
         }
@@ -355,6 +384,7 @@ namespace Gilzoide.FlexUi
             set
             {
                 _paddingBottom = value;
+                LayoutNode.StyleSetPadding(Edge.Bottom, value);
                 RefreshRootLayout();
             }
         }
