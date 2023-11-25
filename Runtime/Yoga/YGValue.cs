@@ -16,15 +16,8 @@ namespace Gilzoide.FlexUi.Yoga
             Unit = unit;
         }
 
-        public static readonly YGValue Undefined = new YGValue
-        {
-            Value = float.NaN,
-            Unit = Unit.Undefined,
-        };
-        public static readonly YGValue Auto = new YGValue
-        {
-            Value = float.NaN,
-            Unit = Unit.Auto,
-        };
+        public static readonly YGValue Zero = new YGValue(0, Unit.Point);
+        public static readonly YGValue Undefined = new YGValue(float.NaN, Unit.Undefined);
+        public static readonly YGValue Auto = new YGValue(float.NaN, Unit.Auto);
     }
 }

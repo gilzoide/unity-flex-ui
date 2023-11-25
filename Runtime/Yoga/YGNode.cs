@@ -39,6 +39,7 @@ namespace Gilzoide.FlexUi.Yoga
             switch (value.Unit)
             {
                 case Unit.Point:
+                case Unit.Undefined:
                     StyleSetWidth(value.Value);
                     break;
 
@@ -49,10 +50,6 @@ namespace Gilzoide.FlexUi.Yoga
                 case Unit.Auto:
                     StyleSetWidthAuto();
                     break;
-
-                case Unit.Undefined:
-                default:
-                    break;
             }
         }
 
@@ -61,6 +58,7 @@ namespace Gilzoide.FlexUi.Yoga
             switch (value.Unit)
             {
                 case Unit.Point:
+                case Unit.Undefined:
                     StyleSetHeight(value.Value);
                     break;
 
@@ -71,10 +69,6 @@ namespace Gilzoide.FlexUi.Yoga
                 case Unit.Auto:
                     StyleSetHeightAuto();
                     break;
-
-                case Unit.Undefined:
-                default:
-                    break;
             }
         }
 
@@ -83,6 +77,7 @@ namespace Gilzoide.FlexUi.Yoga
             switch (value.Unit)
             {
                 case Unit.Point:
+                case Unit.Undefined:
                     StyleSetMinWidth(value.Value);
                     break;
 
@@ -91,11 +86,7 @@ namespace Gilzoide.FlexUi.Yoga
                     break;
 
                 case Unit.Auto:
-                    throw new ArgumentOutOfRangeException(nameof(value), "Auto unit is not supported");
-
-                case Unit.Undefined:
-                default:
-                    break;
+                    throw new ArgumentOutOfRangeException(nameof(value), "Auto is not supported for min width");
             }
         }
 
@@ -104,6 +95,7 @@ namespace Gilzoide.FlexUi.Yoga
             switch (value.Unit)
             {
                 case Unit.Point:
+                case Unit.Undefined:
                     StyleSetMaxWidth(value.Value);
                     break;
 
@@ -112,11 +104,7 @@ namespace Gilzoide.FlexUi.Yoga
                     break;
 
                 case Unit.Auto:
-                    throw new ArgumentOutOfRangeException(nameof(value), "Auto unit is not supported");
-
-                case Unit.Undefined:
-                default:
-                    break;
+                    throw new ArgumentOutOfRangeException(nameof(value), "Auto is not supported for max width");
             }
         }
 
@@ -125,6 +113,7 @@ namespace Gilzoide.FlexUi.Yoga
             switch (value.Unit)
             {
                 case Unit.Point:
+                case Unit.Undefined:
                     StyleSetMinHeight(value.Value);
                     break;
 
@@ -133,11 +122,7 @@ namespace Gilzoide.FlexUi.Yoga
                     break;
 
                 case Unit.Auto:
-                    throw new ArgumentOutOfRangeException(nameof(value), "Auto unit is not supported");
-
-                case Unit.Undefined:
-                default:
-                    break;
+                    throw new ArgumentOutOfRangeException(nameof(value), "Auto is not supported for min height");
             }
         }
 
@@ -146,6 +131,7 @@ namespace Gilzoide.FlexUi.Yoga
             switch (value.Unit)
             {
                 case Unit.Point:
+                case Unit.Undefined:
                     StyleSetMaxHeight(value.Value);
                     break;
 
@@ -154,11 +140,7 @@ namespace Gilzoide.FlexUi.Yoga
                     break;
 
                 case Unit.Auto:
-                    throw new ArgumentOutOfRangeException(nameof(value), "Auto unit is not supported");
-
-                case Unit.Undefined:
-                default:
-                    break;
+                    throw new ArgumentOutOfRangeException(nameof(value), "Auto is not supported for max height");
             }
         }
 
@@ -167,6 +149,7 @@ namespace Gilzoide.FlexUi.Yoga
             switch (value.Unit)
             {
                 case Unit.Point:
+                case Unit.Undefined:
                     StyleSetFlexBasis(value.Value);
                     break;
 
@@ -177,10 +160,43 @@ namespace Gilzoide.FlexUi.Yoga
                 case Unit.Auto:
                     StyleSetFlexBasisAuto();
                     break;
+            }
+        }
 
+        public void StyleSetMargin(Edge edge, YGValue value)
+        {
+            switch (value.Unit)
+            {
+                case Unit.Point:
                 case Unit.Undefined:
-                default:
+                    StyleSetMargin(edge, value.Value);
                     break;
+
+                case Unit.Percent:
+                    StyleSetMarginPercent(edge, value.Value);
+                    break;
+
+                case Unit.Auto:
+                    StyleSetMarginAuto(edge);
+                    break;
+            }
+        }
+
+        public void StyleSetPadding(Edge edge, YGValue value)
+        {
+            switch (value.Unit)
+            {
+                case Unit.Point:
+                case Unit.Undefined:
+                    StyleSetPadding(edge, value.Value);
+                    break;
+
+                case Unit.Percent:
+                    StyleSetPaddingPercent(edge, value.Value);
+                    break;
+
+                case Unit.Auto:
+                    throw new ArgumentOutOfRangeException(nameof(value), "Auto is not supported for padding");
             }
         }
 

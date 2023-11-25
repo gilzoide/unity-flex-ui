@@ -26,7 +26,7 @@ namespace Gilzoide.FlexUi
         [SerializeField] private Align _alignSelf = Align.Auto;
         [SerializeField] private Align _alignContent = Align.Auto;
 
-        [Header("Layout")]
+        [Header("Size")]
         [SerializeField] private YGValue _width = new YGValue(100, Unit.Point);
         [SerializeField] private YGValue _height = new YGValue(100, Unit.Point);
         [SerializeField] private YGValue _minWidth = YGValue.Undefined;
@@ -34,6 +34,18 @@ namespace Gilzoide.FlexUi
         [SerializeField] private YGValue _maxWidth = YGValue.Undefined;
         [SerializeField] private YGValue _maxHeight = YGValue.Undefined;
         [SerializeField] private YGValue _aspectRatio = YGValue.Undefined;
+
+        [Header("Margin")]
+        [SerializeField] private YGValue _marginLeft = YGValue.Zero;
+        [SerializeField] private YGValue _marginTop = YGValue.Zero;
+        [SerializeField] private YGValue _marginRight = YGValue.Zero;
+        [SerializeField] private YGValue _marginBottom = YGValue.Zero;
+
+        [Header("Padding")]
+        [SerializeField] private YGValue _paddingLeft = YGValue.Zero;
+        [SerializeField] private YGValue _paddingTop = YGValue.Zero;
+        [SerializeField] private YGValue _paddingRight = YGValue.Zero;
+        [SerializeField] private YGValue _paddingBottom = YGValue.Zero;
 
         public bool IsRootLayoutNode => _parentNode == null;
         public FlexLayout RootLayoutNode
@@ -190,7 +202,7 @@ namespace Gilzoide.FlexUi
             layoutNode.StyleSetAlignItems(_alignItems);
             layoutNode.StyleSetAlignSelf(_alignSelf);
             layoutNode.StyleSetAlignContent(_alignContent);
-            // layout
+            // size
             layoutNode.StyleSetWidth(_width);
             layoutNode.StyleSetHeight(_height);
             layoutNode.StyleSetMinWidth(_minWidth);
@@ -198,6 +210,16 @@ namespace Gilzoide.FlexUi
             layoutNode.StyleSetMaxWidth(_maxWidth);
             layoutNode.StyleSetMaxHeight(_maxHeight);
             layoutNode.StyleSetAspectRatio(_aspectRatio.Value);
+            // margin
+            layoutNode.StyleSetMargin(Edge.Left, _marginLeft);
+            layoutNode.StyleSetMargin(Edge.Top, _marginTop);
+            layoutNode.StyleSetMargin(Edge.Right, _marginRight);
+            layoutNode.StyleSetMargin(Edge.Bottom, _marginBottom);
+            // padding
+            layoutNode.StyleSetPadding(Edge.Left, _paddingLeft);
+            layoutNode.StyleSetPadding(Edge.Top, _paddingTop);
+            layoutNode.StyleSetPadding(Edge.Right, _paddingRight);
+            layoutNode.StyleSetPadding(Edge.Bottom, _paddingBottom);
         }
 
         protected void TrackChild(FlexLayout child)
