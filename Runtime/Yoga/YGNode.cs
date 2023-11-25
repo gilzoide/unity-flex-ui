@@ -38,8 +38,11 @@ namespace Gilzoide.FlexUi.Yoga
         {
             switch (value.Unit)
             {
-                case Unit.Point:
                 case Unit.Undefined:
+                    StyleSetPosition(edge, float.NaN);
+                    break;
+
+                case Unit.Point:
                     StyleSetPosition(edge, value.Value);
                     break;
 
@@ -56,8 +59,11 @@ namespace Gilzoide.FlexUi.Yoga
         {
             switch (value.Unit)
             {
-                case Unit.Point:
                 case Unit.Undefined:
+                    StyleSetWidth(float.NaN);
+                    break;
+
+                case Unit.Point:
                     StyleSetWidth(value.Value);
                     break;
 
@@ -75,8 +81,11 @@ namespace Gilzoide.FlexUi.Yoga
         {
             switch (value.Unit)
             {
-                case Unit.Point:
                 case Unit.Undefined:
+                    StyleSetHeight(float.NaN);
+                    break;
+
+                case Unit.Point:
                     StyleSetHeight(value.Value);
                     break;
 
@@ -94,8 +103,11 @@ namespace Gilzoide.FlexUi.Yoga
         {
             switch (value.Unit)
             {
-                case Unit.Point:
                 case Unit.Undefined:
+                    StyleSetMinWidth(float.NaN);
+                    break;
+
+                case Unit.Point:
                     StyleSetMinWidth(value.Value);
                     break;
 
@@ -112,8 +124,11 @@ namespace Gilzoide.FlexUi.Yoga
         {
             switch (value.Unit)
             {
-                case Unit.Point:
                 case Unit.Undefined:
+                    StyleSetMaxWidth(float.NaN);
+                    break;
+
+                case Unit.Point:
                     StyleSetMaxWidth(value.Value);
                     break;
 
@@ -130,8 +145,11 @@ namespace Gilzoide.FlexUi.Yoga
         {
             switch (value.Unit)
             {
-                case Unit.Point:
                 case Unit.Undefined:
+                    StyleSetMinHeight(float.NaN);
+                    break;
+
+                case Unit.Point:
                     StyleSetMinHeight(value.Value);
                     break;
 
@@ -148,8 +166,11 @@ namespace Gilzoide.FlexUi.Yoga
         {
             switch (value.Unit)
             {
-                case Unit.Point:
                 case Unit.Undefined:
+                    StyleSetMaxHeight(float.NaN);
+                    break;
+
+                case Unit.Point:
                     StyleSetMaxHeight(value.Value);
                     break;
 
@@ -166,8 +187,11 @@ namespace Gilzoide.FlexUi.Yoga
         {
             switch (value.Unit)
             {
-                case Unit.Point:
                 case Unit.Undefined:
+                    StyleSetFlexBasis(float.NaN);
+                    break;
+
+                case Unit.Point:
                     StyleSetFlexBasis(value.Value);
                     break;
 
@@ -185,8 +209,11 @@ namespace Gilzoide.FlexUi.Yoga
         {
             switch (value.Unit)
             {
-                case Unit.Point:
                 case Unit.Undefined:
+                    StyleSetMargin(edge, float.NaN);
+                    break;
+
+                case Unit.Point:
                     StyleSetMargin(edge, value.Value);
                     break;
 
@@ -204,8 +231,11 @@ namespace Gilzoide.FlexUi.Yoga
         {
             switch (value.Unit)
             {
-                case Unit.Point:
                 case Unit.Undefined:
+                    StyleSetPadding(edge, float.NaN);
+                    break;
+
+                case Unit.Point:
                     StyleSetPadding(edge, value.Value);
                     break;
 
