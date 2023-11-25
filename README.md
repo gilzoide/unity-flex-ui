@@ -1,6 +1,7 @@
 # Flex UI
-Flexible layout support for [Unity UI](https://docs.unity3d.com/Packages/com.unity.ugui@1.0/manual/index.html) using the [Yoga](https://yogalayout.dev/) layout engine.
+Flexbox support for [Unity UI](https://docs.unity3d.com/Packages/com.unity.ugui@1.0/manual/index.html) using the [Yoga](https://yogalayout.dev/) layout engine.
 
+![Flex Layout demo](Extras~/demo.gif)
 
 ## Features
 - There is a single component you need: [FlexLayout](Runtime/FlexLayout.cs)
