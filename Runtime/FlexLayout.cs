@@ -12,15 +12,14 @@ namespace Gilzoide.FlexUi
     {
         public const DrivenTransformProperties DrivenRectTransformProperties = DrivenTransformProperties.Anchors | DrivenTransformProperties.AnchoredPosition | DrivenTransformProperties.SizeDelta;
 
-        [Header("Position")]
+        [FoldoutHeader("Position")]
         [SerializeField] private PositionType _positionType = PositionType.Relative;
         [SerializeField] private YGValue _positionLeft = YGValue.Undefined;
         [SerializeField] private YGValue _positionTop = YGValue.Undefined;
         [SerializeField] private YGValue _positionRight = YGValue.Undefined;
         [SerializeField] private YGValue _positionBottom = YGValue.Undefined;
 
-
-        [Header("Flex")]
+        [FoldoutHeader("Flex")]
         [SerializeField] private Direction _direction = Direction.Inherit;
         [SerializeField] private FlexDirection _flexDirection = FlexDirection.Row;
         [SerializeField] private Wrap _flexWrap = Wrap.Wrap;
@@ -28,13 +27,13 @@ namespace Gilzoide.FlexUi
         [SerializeField, Min(0)] private float _flexGrow = 0;
         [SerializeField, Min(0)] private float _flexShrink = 1;
 
-        [Header("Alignment")]
+        [FoldoutHeader("Alignment")]
         [SerializeField] private Justify _justifyContent = Justify.FlexStart;
         [SerializeField] private Align _alignItems = Align.Auto;
         [SerializeField] private Align _alignSelf = Align.Auto;
         [SerializeField] private Align _alignContent = Align.Auto;
 
-        [Header("Size")]
+        [FoldoutHeader("Size")]
         [SerializeField] private YGValue _width = new YGValue(100, Unit.Point);
         [SerializeField] private YGValue _height = new YGValue(100, Unit.Point);
         [SerializeField] private YGValue _minWidth = YGValue.Undefined;
@@ -43,13 +42,13 @@ namespace Gilzoide.FlexUi
         [SerializeField] private YGValue _maxHeight = YGValue.Undefined;
         [SerializeField] private YGValue _aspectRatio = YGValue.Undefined;
 
-        [Header("Margin")]
+        [FoldoutHeader("Margin")]
         [SerializeField] private YGValue _marginLeft = YGValue.Zero;
         [SerializeField] private YGValue _marginTop = YGValue.Zero;
         [SerializeField] private YGValue _marginRight = YGValue.Zero;
         [SerializeField] private YGValue _marginBottom = YGValue.Zero;
 
-        [Header("Padding")]
+        [FoldoutHeader("Padding")]
         [SerializeField] private YGValue _paddingLeft = YGValue.Zero;
         [SerializeField] private YGValue _paddingTop = YGValue.Zero;
         [SerializeField] private YGValue _paddingRight = YGValue.Zero;
