@@ -12,6 +12,14 @@ namespace Gilzoide.FlexUi
     {
         public const DrivenTransformProperties DrivenRectTransformProperties = DrivenTransformProperties.Anchors | DrivenTransformProperties.AnchoredPosition | DrivenTransformProperties.SizeDelta;
 
+        [Header("Position")]
+        [SerializeField] private PositionType _positionType = PositionType.Relative;
+        [SerializeField] private YGValue _positionLeft = YGValue.Undefined;
+        [SerializeField] private YGValue _positionTop = YGValue.Undefined;
+        [SerializeField] private YGValue _positionRight = YGValue.Undefined;
+        [SerializeField] private YGValue _positionBottom = YGValue.Undefined;
+
+
         [Header("Flex")]
         [SerializeField] private Direction _direction = Direction.Inherit;
         [SerializeField] private FlexDirection _flexDirection = FlexDirection.Row;
@@ -190,6 +198,12 @@ namespace Gilzoide.FlexUi
         protected void UpdateNodeStyle()
         {
             YGNode layoutNode = LayoutNode;
+            // position
+            layoutNode.StyleSetPositionType(_positionType);
+            layoutNode.StyleSetPosition(Edge.Left, _positionLeft);
+            layoutNode.StyleSetPosition(Edge.Top, _positionTop);
+            layoutNode.StyleSetPosition(Edge.Right, _positionRight);
+            layoutNode.StyleSetPosition(Edge.Bottom, _positionBottom);
             // flex
             layoutNode.StyleSetDirection(_direction);
             layoutNode.StyleSetFlexDirection(_flexDirection);

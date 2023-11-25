@@ -34,6 +34,24 @@ namespace Gilzoide.FlexUi.Yoga
 
         public bool IsNull => _nodePtr == IntPtr.Zero;
 
+        public void StyleSetPosition(Edge edge, YGValue value)
+        {
+            switch (value.Unit)
+            {
+                case Unit.Point:
+                case Unit.Undefined:
+                    StyleSetPosition(edge, value.Value);
+                    break;
+
+                case Unit.Percent:
+                    StyleSetPositionPercent(edge, value.Value);
+                    break;
+
+                case Unit.Auto:
+                    throw new ArgumentOutOfRangeException(nameof(value), "Auto is not supported for position");
+            }
+        }
+
         public void StyleSetWidth(YGValue value)
         {
             switch (value.Unit)
