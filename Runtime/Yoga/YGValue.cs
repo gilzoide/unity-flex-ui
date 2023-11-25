@@ -16,6 +16,11 @@ namespace Gilzoide.FlexUi.Yoga
             Unit = unit;
         }
 
+        public static YGValue Percent(float value)
+        {
+            return new YGValue(value, Unit.Percent);
+        }
+
         public static implicit operator YGValue(float value)
         {
             return new YGValue(value, Unit.Point);
