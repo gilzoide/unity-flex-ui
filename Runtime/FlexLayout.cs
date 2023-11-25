@@ -102,6 +102,7 @@ namespace Gilzoide.FlexUi
         {
             base.OnEnable();
             RefreshParent();
+            RefreshChildren();
         }
 
         protected override void OnDisable()
@@ -256,7 +257,19 @@ namespace Gilzoide.FlexUi
             }
         }
 
-        protected void TrackChild(FlexLayout child)
+        protected void RefreshChildren()
+        {
+            foreach (Transform child in RectTransform)
+            {
+                if (child.TryGetComponent(out FlexLayout childLayout))
+                {
+                    TrackChild(childLayout, false);
+                }
+            }
+            RefreshDrivenRectTransformTracker();
+        }
+
+        protected void TrackChild(FlexLayout child, bool refreshDrivenRectTransformTracker = true)
         {
             child._parentNode = this;
             int binaryIndex = _childrenNodes.BinarySearch(child, this);
@@ -266,10 +279,13 @@ namespace Gilzoide.FlexUi
                 _childrenNodes.Insert(childIndex, child);
                 LayoutNode.InsertChild(child.LayoutNode, childIndex);
             }
-            RefreshTrackedChildren();
+            if (refreshDrivenRectTransformTracker)
+            {
+                RefreshDrivenRectTransformTracker();
+            }
         }
 
-        protected void UntrackChild(FlexLayout child)
+        protected void UntrackChild(FlexLayout child, bool refreshDrivenRectTransformTracker = true)
         {
             child._parentNode = null;
             int index = _childrenNodes.BinarySearch(child, this);
@@ -278,10 +294,13 @@ namespace Gilzoide.FlexUi
                 LayoutNode.RemoveChild(_childrenNodes[index].LayoutNode);
                 _childrenNodes.RemoveAt(index);
             }
-            RefreshTrackedChildren();
+            if (refreshDrivenRectTransformTracker)
+            {
+                RefreshDrivenRectTransformTracker();
+            }
         }
 
-        protected void RefreshTrackedChildren()
+        protected void RefreshDrivenRectTransformTracker()
         {
             _drivenRectTransformTracker.Clear();
             foreach (FlexLayout child in _childrenNodes)
