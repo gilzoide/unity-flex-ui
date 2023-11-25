@@ -86,6 +86,7 @@ namespace Gilzoide.FlexUi
         private FlexLayout _parentNode;
         private readonly List<FlexLayout> _childrenNodes = new List<FlexLayout>();
         private DrivenRectTransformTracker _drivenRectTransformTracker = new DrivenRectTransformTracker();
+        private bool _isRefreshScheduled;
 
         protected override void Awake()
         {
@@ -127,7 +128,30 @@ namespace Gilzoide.FlexUi
             }
         }
 
-        public void RefreshRootLayout()
+        public async void RefreshRootLayout()
+        {
+            FlexLayout root = RootLayoutNode;
+            if (root._isRefreshScheduled)
+            {
+                return;
+            }
+
+            root._isRefreshScheduled = true;
+            try
+            {
+                await Task.Yield();
+                if (root)
+                {
+                    root.RefreshLayout();
+                }
+            }
+            finally
+            {
+                root._isRefreshScheduled = false;
+            }
+        }
+
+        public void RefreshRootLayoutImmediate()
         {
             RootLayoutNode.RefreshLayout();
         }
@@ -196,6 +220,8 @@ namespace Gilzoide.FlexUi
             layoutNode.StyleSetPadding(Edge.Top, _paddingTop);
             layoutNode.StyleSetPadding(Edge.Right, _paddingRight);
             layoutNode.StyleSetPadding(Edge.Bottom, _paddingBottom);
+
+            RefreshRootLayout();
         }
 
         protected void RefreshParent()
@@ -280,15 +306,10 @@ namespace Gilzoide.FlexUi
         }
 
 #if UNITY_EDITOR
-        protected override async void OnValidate()
+        protected override void OnValidate()
         {
             base.OnValidate();
-            await Task.Yield();
-            if (this)
-            {
-                UpdateNodeStyle();
-                RefreshRootLayout();
-            }
+            UpdateNodeStyle();
         }
 #endif
     }
