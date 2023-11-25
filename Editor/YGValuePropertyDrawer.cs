@@ -20,11 +20,11 @@ namespace Gilzoide.FlexUi.Editor
             {
                 SetValue(property, YGValue.Undefined);
             }
-            else if (newValue.EndsWith('%') && float.TryParse(newValue.Substring(0, newValue.Length - 1), out float percentValue))
+            else if (newValue.EndsWith('%') && ExpressionEvaluator.Evaluate(newValue.TrimEnd('%'), out float percentValue))
             {
                 SetValue(property, new YGValue(percentValue, Unit.Percent));
             }
-            else if (float.TryParse(newValue, out float pointValue))
+            else if (ExpressionEvaluator.Evaluate(newValue, out float pointValue))
             {
                 SetValue(property, new YGValue(pointValue, Unit.Point));
             }
