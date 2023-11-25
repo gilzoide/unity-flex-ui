@@ -82,7 +82,7 @@ yoga~/build/android/%/libyogacore.a:
 	$(CMAKE_BIN) -S yoga~/yoga -B $(dir $@) $(CMAKE_FLAGS)
 	$(CMAKE_BIN) --build $(dir $@)
 
-android/%/flex-ui.so: CXXFLAGS += -fPIC
+android/%/flex-ui.so: CXXFLAGS += -fPIC -static-libstdc++
 android/%/flex-ui.so: LINKFLAGS += -shared
 android/%/flex-ui.so: yoga~/build/android/%/libyogacore.a | android/%
 	$(CXX) -o $@ -Wl,--whole-archive $< -Wl,--no-whole-archive $(CXXFLAGS) $(LINKFLAGS)
