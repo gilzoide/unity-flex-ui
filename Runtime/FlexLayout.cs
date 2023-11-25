@@ -34,8 +34,8 @@ namespace Gilzoide.FlexUi
         [SerializeField] private Align _alignContent = Align.Auto;
 
         [FoldoutHeader("Size")]
-        [SerializeField] private YGValue _width = new YGValue(100, Unit.Point);
-        [SerializeField] private YGValue _height = new YGValue(100, Unit.Point);
+        [SerializeField] private YGValue _width = 100;
+        [SerializeField] private YGValue _height = 100;
         [SerializeField] private YGValue _minWidth = YGValue.Undefined;
         [SerializeField] private YGValue _minHeight = YGValue.Undefined;
         [SerializeField] private YGValue _maxWidth = YGValue.Undefined;

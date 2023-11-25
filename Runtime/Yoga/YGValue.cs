@@ -16,6 +16,11 @@ namespace Gilzoide.FlexUi.Yoga
             Unit = unit;
         }
 
+        public static implicit operator YGValue(float value)
+        {
+            return new YGValue(value, Unit.Point);
+        }
+
         public static readonly YGValue Zero = new YGValue(0, Unit.Point);
         public static readonly YGValue Undefined = new YGValue(float.NaN, Unit.Undefined);
         public static readonly YGValue Auto = new YGValue(float.NaN, Unit.Auto);
