@@ -73,7 +73,17 @@ namespace Gilzoide.FlexUi
             }
         }
 
-        public RectTransform RectTransform { get; private set; }
+        public RectTransform RectTransform
+        {
+            get
+            {
+                if (!_rectTransform)
+                {
+                    _rectTransform = (RectTransform) transform;
+                }
+                return _rectTransform;
+            }
+        }
 
         protected YGNode LayoutNode
         {
@@ -92,22 +102,11 @@ namespace Gilzoide.FlexUi
         private readonly List<FlexLayout> _childrenNodes = new List<FlexLayout>();
         private DrivenRectTransformTracker _drivenRectTransformTracker = new DrivenRectTransformTracker();
         private bool _isRefreshScheduled;
-
-        protected override void Awake()
-        {
-            base.Awake();
-            RectTransform = transform as RectTransform;
-        }
+        private RectTransform _rectTransform;
 
         protected override void OnEnable()
         {
             base.OnEnable();
-#if UNITY_EDITOR
-            if (BuildPipeline.isBuildingPlayer)
-            {
-                return;
-            }
-#endif
             RefreshParent();
             RefreshChildren();
         }
