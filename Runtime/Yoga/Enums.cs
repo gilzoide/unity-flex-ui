@@ -1,4 +1,6 @@
 // Reference: https://github.com/facebook/yoga/blob/main/yoga/YGEnums.h
+using System;
+
 namespace Gilzoide.FlexUi.Yoga
 {
     public enum Align
@@ -46,6 +48,23 @@ namespace Gilzoide.FlexUi.Yoga
         All,
     }
 
+    [Flags]
+    public enum Errata
+    {
+        None = 0,
+        StretchFlexBasis = 1,
+        StartingEndingEdgeFromFlexDirection = 2,
+        PositionStaticBehavesLikeRelative = 4,
+        All = 2147483647,
+        Classic = 2147483646,
+    }
+
+    public enum ExperimentalFeature
+    {
+        WebFlexBasis,
+        AbsolutePercentageAgainstPaddingEdge,
+    }
+
     public enum FlexDirection
     {
         Column,
@@ -78,6 +97,7 @@ namespace Gilzoide.FlexUi.Yoga
         Absolute,
     }
 
+    [Flags]
     public enum PrintOptions
     {
         Layout = 1,

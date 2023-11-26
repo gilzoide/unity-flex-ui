@@ -7,6 +7,24 @@ namespace Gilzoide.FlexUi.Yoga
     {
         const string YogaDll = "flex-ui";
 
+        #region YGConfig
+
+        [DllImport(YogaDll)] public static extern IntPtr YGConfigNew();
+        [DllImport(YogaDll)] public static extern void YGConfigFree(IntPtr config);
+        [DllImport(YogaDll)] public static extern IntPtr YGConfigGetDefault();
+
+        [DllImport(YogaDll)] public static extern void YGConfigSetUseWebDefaults(IntPtr config, bool enabled);
+        [DllImport(YogaDll)] public static extern bool YGConfigGetUseWebDefaults(IntPtr config);
+        [DllImport(YogaDll)] public static extern void YGConfigSetPointScaleFactor(IntPtr config, float enabled);
+        [DllImport(YogaDll)] public static extern float YGConfigGetPointScaleFactor(IntPtr config);
+        [DllImport(YogaDll)] public static extern void YGConfigSetErrata(IntPtr config, Errata errata);
+        [DllImport(YogaDll)] public static extern Errata YGConfigGetErrata(IntPtr config);
+        [DllImport(YogaDll)] public static extern void YGConfigSetExperimentalFeatureEnabled(IntPtr config, ExperimentalFeature feature, bool enabled);
+        [DllImport(YogaDll)] public static extern bool YGConfigIsExperimentalFeatureEnabled(IntPtr config, ExperimentalFeature feature);
+
+
+        #endregion
+
         #region YGNode
 
         [DllImport(YogaDll)] public static extern IntPtr YGNodeNew();
@@ -31,6 +49,9 @@ namespace Gilzoide.FlexUi.Yoga
         [DllImport(YogaDll)] public static extern nuint YGNodeGetChildCount(IntPtr node);
         [DllImport(YogaDll)] public static extern IntPtr YGNodeGetOwner(IntPtr node);
         [DllImport(YogaDll)] public static extern IntPtr YGNodeGetParent(IntPtr node);
+
+        [DllImport(YogaDll)] public static extern void YGNodeSetConfig(IntPtr node, IntPtr config);
+        [DllImport(YogaDll)] public static extern IntPtr YGNodeGetConfig(IntPtr node);
 
         [DllImport(YogaDll)] public static extern void YGNodePrint(IntPtr node, PrintOptions options);
 

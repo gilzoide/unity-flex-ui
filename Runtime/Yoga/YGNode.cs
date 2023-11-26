@@ -5,7 +5,9 @@ namespace Gilzoide.FlexUi.Yoga
 {
     public struct YGNode : IDisposable, IEquatable<YGNode>
     {
-        private IntPtr _nodePtr;
+        internal IntPtr _nodePtr;
+
+        public bool IsNull => _nodePtr == IntPtr.Zero;
 
         public void Instantiate()
         {
@@ -32,7 +34,6 @@ namespace Gilzoide.FlexUi.Yoga
             return _nodePtr == other._nodePtr;
         }
 
-        public bool IsNull => _nodePtr == IntPtr.Zero;
 
         public void StyleSetPosition(Edge edge, YGValue value)
         {
@@ -338,6 +339,18 @@ namespace Gilzoide.FlexUi.Yoga
             return new YGNode
             {
                 _nodePtr = Yoga.YGNodeGetParent(_nodePtr),
+            };
+        }
+
+        public void SetConfig(YGConfig config)
+        {
+            Yoga.YGNodeSetConfig(_nodePtr, config._configPtr);
+        }
+        public YGConfig GetConfig()
+        {
+            return new YGConfig
+            {
+                _configPtr = Yoga.YGNodeGetConfig(_nodePtr),
             };
         }
 
