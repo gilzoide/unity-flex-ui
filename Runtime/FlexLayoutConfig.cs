@@ -20,6 +20,37 @@ namespace Gilzoide.FlexUi
         [Tooltip("Turn experimental Yoga features on or off")]
         [SerializeField] private ExperimentalFeatureFlags _experimentalFeatures = default;
 
+        #region Property getters/setters
+
+        public float PointScaleFactor
+        {
+            get => _pointScaleFactor;
+            set
+            {
+                _pointScaleFactor = value;
+                _config.SetPointScaleFactor(value);
+            }
+        }
+        public Errata Errata
+        {
+            get => _errata;
+            set
+            {
+                _errata = value;
+                _config.SetErrata(value);
+            }
+        }
+        public ExperimentalFeatureFlags ExperimentalFeatures
+        {
+            get => _experimentalFeatures;
+            set
+            {
+                _experimentalFeatures = value;
+                _config.SetExperimentalFeatures(value);
+            }
+        }
+
+        #endregion
 
         public YGConfig Config
         {
@@ -53,10 +84,9 @@ namespace Gilzoide.FlexUi
 
         protected void RefreshConfig()
         {
-            YGConfig config = Config;
-            config.SetPointScaleFactor(_pointScaleFactor);
-            config.SetErrata(_errata);
-            config.SetExperimentalFeatures(_experimentalFeatures);
+            _config.SetPointScaleFactor(_pointScaleFactor);
+            _config.SetErrata(_errata);
+            _config.SetExperimentalFeatures(_experimentalFeatures);
         }
 
 #if UNITY_EDITOR

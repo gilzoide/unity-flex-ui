@@ -38,7 +38,3 @@ To learn more about the properties supported by `FlexLayout`, check out the Yoga
 
 You can also set the layout engine configurations by creating `FlexLayoutConfig` assets and setting them to `FlexLayout`'s "Configuration" property.
 These configurations include toggling of experimental features and controlling how Yoga rounds floating point values using the "Point Scale Factor" property.
-
-
-## TODO
-[ ] Add property getter/setters in `FlexLayoutConfig`
