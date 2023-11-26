@@ -4,7 +4,7 @@ ANDROID_NDK_ROOT ?=
 BUILD_DIRS = \
 	windows/x86_64 windows/x86 \
 	linux/x86_64 linux/x86 \
-	osx ios \
+	osx ios tvos \
 	android/arm64 android/arm32 android/x86 android/x86_64
 
 # Misc
@@ -68,9 +68,24 @@ yoga~/build/ios/libyogacore.a:
 	$(CMAKE_BIN) -S yoga~/yoga -B $(dir $@) $(CMAKE_FLAGS)
 	$(CMAKE_BIN) --build $(dir $@)
 
-ios/flex-ui.dylib: CXXFLAGS += -arch arm64 -isysroot $(shell xcrun --sdk iphoneos --show-sdk-path)
+ios/flex-ui.dylib: CXXFLAGS += -arch arm64 -isysroot $(shell xcrun --show-sdk-path --sdk iphoneos)
 ios/flex-ui.dylib: LINKFLAGS += -shared -Wl,-all_load
 ios/flex-ui.dylib: yoga~/build/ios/libyogacore.a | ios
+	$(CXX) -o $@ $< $(CXXFLAGS) $(LINKFLAGS)
+
+
+# tvOS
+yoga~/build/tvos/libyogacore.a: CMAKE_FLAGS = \
+	-DCMAKE_OSX_ARCHITECTURES="arm64" \
+	-DCMAKE_BUILD_TYPE=Release \
+	-DCMAKE_OSX_SYSROOT=appletvos
+yoga~/build/tvos/libyogacore.a:
+	$(CMAKE_BIN) -S yoga~/yoga -B $(dir $@) $(CMAKE_FLAGS)
+	$(CMAKE_BIN) --build $(dir $@)
+
+tvos/flex-ui.dylib: CXXFLAGS += -arch arm64 -isysroot $(shell xcrun --show-sdk-path --sdk appletvos)
+tvos/flex-ui.dylib: LINKFLAGS += -shared -Wl,-all_load
+tvos/flex-ui.dylib: yoga~/build/tvos/libyogacore.a | tvos
 	$(CXX) -o $@ $< $(CXXFLAGS) $(LINKFLAGS)
 
 
@@ -100,6 +115,7 @@ linux-x86_64: linux/x86_64/flex-ui.so
 linux-x86: linux/x86/flex-ui.so
 macos-universal: osx/flex-ui.dylib
 ios-arm64: ios/flex-ui.dylib
+tvos-arm64: tvos/flex-ui.dylib
 android-arm64: android/arm64/flex-ui.so
 android-arm32: android/arm32/flex-ui.so
 android-x86_64: android/x86_64/flex-ui.so
