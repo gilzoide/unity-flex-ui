@@ -436,6 +436,12 @@ namespace Gilzoide.FlexUi
             RefreshParent();
         }
 
+        protected virtual void OnTransformChildrenChanged()
+        {
+            ClearTrackedChildren();
+            RefreshChildren();
+        }
+
         protected override void OnRectTransformDimensionsChange()
         {
             base.OnRectTransformDimensionsChange();
