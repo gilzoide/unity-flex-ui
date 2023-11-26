@@ -17,9 +17,9 @@ namespace Gilzoide.FlexUi
         [Tooltip("Configures how Yoga balances W3C conformance vs compatibility with layouts created against earlier versions of Yoga.")]
         [SerializeField] private Errata _errata = Errata.None;
 
-        [Header("Experimental Features")]
-        [SerializeField] private bool _webFlexBasis = false;
-        [SerializeField] private bool _absolutePercentageAgainstPaddingEdge = false;
+        [Tooltip("Turn experimental Yoga features on or off")]
+        [SerializeField] private ExperimentalFeatureFlags _experimentalFeatures = default;
+
 
         public YGConfig Config
         {
@@ -56,8 +56,7 @@ namespace Gilzoide.FlexUi
             YGConfig config = Config;
             config.SetPointScaleFactor(_pointScaleFactor);
             config.SetErrata(_errata);
-            config.SetExperimentalFeatureEnabled(ExperimentalFeature.WebFlexBasis, _webFlexBasis);
-            config.SetExperimentalFeatureEnabled(ExperimentalFeature.AbsolutePercentageAgainstPaddingEdge, _absolutePercentageAgainstPaddingEdge);
+            config.SetExperimentalFeatures(_experimentalFeatures);
         }
 
 #if UNITY_EDITOR

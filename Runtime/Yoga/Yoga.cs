@@ -22,7 +22,6 @@ namespace Gilzoide.FlexUi.Yoga
         [DllImport(YogaDll)] public static extern void YGConfigSetExperimentalFeatureEnabled(IntPtr config, ExperimentalFeature feature, bool enabled);
         [DllImport(YogaDll)] public static extern bool YGConfigIsExperimentalFeatureEnabled(IntPtr config, ExperimentalFeature feature);
 
-
         #endregion
 
         #region YGNode

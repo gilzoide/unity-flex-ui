@@ -35,6 +35,14 @@ namespace Gilzoide.FlexUi.Yoga
             return _configPtr == other._configPtr;
         }
 
+        public void SetExperimentalFeatures(ExperimentalFeatureFlags experimentalFeatures)
+        {
+            SetExperimentalFeatureEnabled(ExperimentalFeature.WebFlexBasis, experimentalFeatures.HasFlag(ExperimentalFeatureFlags.WebFlexBasis));
+            SetExperimentalFeatureEnabled(ExperimentalFeature.AbsolutePercentageAgainstPaddingEdge, experimentalFeatures.HasFlag(ExperimentalFeatureFlags.AbsolutePercentageAgainstPaddingEdge));
+        }
+
+        #region YGConfig
+
         public void Free()
         {
             Yoga.YGConfigFree(_configPtr);
@@ -79,5 +87,7 @@ namespace Gilzoide.FlexUi.Yoga
         {
             return Yoga.YGConfigIsExperimentalFeatureEnabled(_configPtr, feature);
         }
+
+        #endregion
     }
 }

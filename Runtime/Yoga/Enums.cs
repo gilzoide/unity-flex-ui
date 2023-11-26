@@ -65,6 +65,13 @@ namespace Gilzoide.FlexUi.Yoga
         AbsolutePercentageAgainstPaddingEdge,
     }
 
+    [Flags]
+    public enum ExperimentalFeatureFlags
+    {
+        WebFlexBasis = 1 << ExperimentalFeature.WebFlexBasis,
+        AbsolutePercentageAgainstPaddingEdge = 1 << ExperimentalFeature.AbsolutePercentageAgainstPaddingEdge,
+    }
+
     public enum FlexDirection
     {
         Column,
