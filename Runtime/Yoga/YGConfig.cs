@@ -2,7 +2,7 @@ using System;
 
 namespace Gilzoide.FlexUi.Yoga
 {
-    public struct YGConfig : IDisposable
+    public struct YGConfig : IDisposable, IEquatable<YGConfig>
     {
         internal IntPtr _configPtr;
 
@@ -28,6 +28,11 @@ namespace Gilzoide.FlexUi.Yoga
                 Free();
                 _configPtr = IntPtr.Zero;
             }
+        }
+
+        public bool Equals(YGConfig other)
+        {
+            return _configPtr == other._configPtr;
         }
 
         public void Free()
