@@ -1,4 +1,6 @@
 # Flex UI
+[![openupm](https://img.shields.io/npm/v/com.gilzoide.flex-ui?label=openupm&registry_uri=https://package.openupm.com)](https://openupm.com/packages/com.gilzoide.flex-ui/)
+
 Flexbox support for [Unity UI](https://docs.unity3d.com/Packages/com.unity.ugui@1.0/manual/index.html) using the [Yoga](https://yogalayout.dev/) layout engine.
 
 ![Flex Layout demo](Extras~/demo.gif)
@@ -12,7 +14,12 @@ Flexbox support for [Unity UI](https://docs.unity3d.com/Packages/com.unity.ugui@
 
 
 ## How to install
-Install directly using the [Unity Package Manager](https://docs.unity3d.com/Manual/upm-ui-giturl.html) with the following URL:
+This package is available on the [openupm registry](https://openupm.com/) and can be installed using the [openupm-cli](https://github.com/openupm/openupm-cli):
+```
+openupm add com.gilzoide.flex-ui
+```
+
+Otherwise, you can install directly using the [Unity Package Manager](https://docs.unity3d.com/Manual/upm-ui-giturl.html) with the following URL:
 ```
 https://github.com/gilzoide/unity-flex-ui.git#1.0.0-preview2
 ```
