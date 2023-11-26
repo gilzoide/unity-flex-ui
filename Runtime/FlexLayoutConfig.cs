@@ -6,7 +6,6 @@ namespace Gilzoide.FlexUi
     [CreateAssetMenu]
     public class FlexLayoutConfig : ScriptableObject
     {
-        [SerializeField] private bool _useWebDefaults = false;
         [SerializeField, Min(0)] private float _pointScaleFactor = 1f;
         [SerializeField] private Errata _errata = Errata.None;
 
@@ -37,7 +36,6 @@ namespace Gilzoide.FlexUi
         protected void RefreshConfig()
         {
             YGConfig config = Config;
-            config.SetUseWebDefaults(_useWebDefaults);
             config.SetPointScaleFactor(_pointScaleFactor);
             config.SetErrata(_errata);
             config.SetExperimentalFeatureEnabled(ExperimentalFeature.WebFlexBasis, _webFlexBasis);
