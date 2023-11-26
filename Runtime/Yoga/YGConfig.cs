@@ -8,6 +8,14 @@ namespace Gilzoide.FlexUi.Yoga
 
         public bool IsNull => _configPtr == IntPtr.Zero;
 
+        public static YGConfig GetDefaultConfig()
+        {
+            return new YGConfig
+            {
+                _configPtr = Yoga.YGConfigGetDefault(),
+            };
+        }
+
         public void Instantiate()
         {
             _configPtr = Yoga.YGConfigNew();

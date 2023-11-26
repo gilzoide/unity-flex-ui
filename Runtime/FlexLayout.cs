@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Gilzoide.FlexUi.Yoga;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -12,6 +11,8 @@ namespace Gilzoide.FlexUi
     public class FlexLayout : UIBehaviour, IComparer<FlexLayout>
     {
         public const DrivenTransformProperties DrivenRectTransformProperties = DrivenTransformProperties.Anchors | DrivenTransformProperties.AnchoredPosition | DrivenTransformProperties.SizeDelta;
+
+        [SerializeField] private FlexLayoutConfig _configuration;
 
         [FoldoutHeader("Position")]
         [SerializeField] private PositionType _positionType = PositionType.Relative;
@@ -87,6 +88,23 @@ namespace Gilzoide.FlexUi
 
         #region Property getters/setters
 
+        public FlexLayoutConfig Configuration
+        {
+            get => _configuration;
+            set
+            {
+                _configuration = value;
+                if (value)
+                {
+                    LayoutNode.SetConfig(value.Config);
+                }
+                else
+                {
+                    LayoutNode.SetConfig(YGConfig.GetDefaultConfig());
+                }
+                RefreshRootLayout();
+            }
+        }
         public PositionType PositionType
         {
             get => _positionType;
@@ -399,6 +417,7 @@ namespace Gilzoide.FlexUi
                 {
                     _layoutNode.Instantiate();
                     UpdateNodeStyle();
+                    RefreshRootLayout();
                 }
                 return _layoutNode;
             }
@@ -507,6 +526,11 @@ namespace Gilzoide.FlexUi
         protected void UpdateNodeStyle()
         {
             YGNode layoutNode = LayoutNode;
+            // configuration
+            if (_configuration)
+            {
+                layoutNode.SetConfig(_configuration.Config);
+            }
             // position
             layoutNode.StyleSetPositionType(_positionType);
             layoutNode.StyleSetPosition(Edge.Left, _positionLeft);
@@ -543,8 +567,6 @@ namespace Gilzoide.FlexUi
             layoutNode.StyleSetPadding(Edge.Top, _paddingTop);
             layoutNode.StyleSetPadding(Edge.Right, _paddingRight);
             layoutNode.StyleSetPadding(Edge.Bottom, _paddingBottom);
-
-            RefreshRootLayout();
         }
 
         protected void RefreshParent()
@@ -651,6 +673,7 @@ namespace Gilzoide.FlexUi
         {
             base.OnValidate();
             UpdateNodeStyle();
+            RefreshRootLayout();
         }
 #endif
     }

@@ -14,13 +14,16 @@ namespace Gilzoide.FlexUi.Editor
             serializedObject.Update();
 
             SerializedProperty property = serializedObject.GetIterator();
-            property.NextVisible(true);
-
             // script field
+            property.NextVisible(true);
             using (new EditorGUI.DisabledScope(true))
             {
                 EditorGUILayout.PropertyField(property);
             }
+
+            // configuration field
+            property.NextVisible(false);
+            EditorGUILayout.PropertyField(property);
 
             EditorGUI.indentLevel++;
             int foldoutIndex = -1;
