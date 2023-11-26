@@ -14,7 +14,7 @@ Flexbox support for [Unity UI](https://docs.unity3d.com/Packages/com.unity.ugui@
 ## How to install
 Install directly using the [Unity Package Manager](https://docs.unity3d.com/Manual/upm-ui-giturl.html) with the following URL:
 ```
-https://github.com/gilzoide/unity-flex-ui.git#1.0.0-preview1
+https://github.com/gilzoide/unity-flex-ui.git#1.0.0-preview2
 ```
 
 
@@ -31,3 +31,8 @@ To learn more about the properties supported by `FlexLayout`, check out the Yoga
 
 You can also set the layout engine configurations by creating `FlexLayoutConfig` assets and setting them to `FlexLayout`'s "Configuration" property.
 These configurations include toggling of experimental features and controlling how Yoga rounds floating point values using the "Point Scale Factor" property.
+
+
+## TODO
+[ ] Add property getter/setters in `FlexLayoutConfig`
+[ ] Add a way to setup the default Yoga configuration, possibly a boolean in `FlexLayoutConfig`
