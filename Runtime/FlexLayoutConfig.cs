@@ -6,8 +6,15 @@ namespace Gilzoide.FlexUi
     [CreateAssetMenu]
     public class FlexLayoutConfig : ScriptableObject
     {
+        [Tooltip("If true, this configuration will be used by FlexLayout nodes that do not have a configuration set explicitly.")]
         [SerializeField] private bool _isDefaultConfig = false;
+
+        [Tooltip("Yoga will by deafult round final layout positions and dimensions to the nearst point.\n"
+            + "'Point Scale Factor' controls the density of the grid used for layout rounding (e.g. to round to the closest display pixel).\n"
+            + "Set this to 0 to avoid rounding the layout results.")]
         [SerializeField, Min(0)] private float _pointScaleFactor = 1f;
+
+        [Tooltip("Configures how Yoga balances W3C conformance vs compatibility with layouts created against earlier versions of Yoga.")]
         [SerializeField] private Errata _errata = Errata.None;
 
         [Header("Experimental Features")]
