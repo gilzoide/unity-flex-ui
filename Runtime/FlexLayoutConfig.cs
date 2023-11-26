@@ -6,6 +6,7 @@ namespace Gilzoide.FlexUi
     [CreateAssetMenu]
     public class FlexLayoutConfig : ScriptableObject
     {
+        [SerializeField] private bool _isDefaultConfig = false;
         [SerializeField, Min(0)] private float _pointScaleFactor = 1f;
         [SerializeField] private Errata _errata = Errata.None;
 
@@ -19,7 +20,14 @@ namespace Gilzoide.FlexUi
             {
                 if (_config.IsNull)
                 {
-                    _config.Instantiate();
+                    if (_isDefaultConfig)
+                    {
+                        _config = YGConfig.GetDefaultConfig();
+                    }
+                    else
+                    {
+                        _config.Instantiate();
+                    }
                     RefreshConfig();
                 }
                 return _config;
@@ -30,7 +38,10 @@ namespace Gilzoide.FlexUi
 
         protected void OnDisable()
         {
-            _config.Dispose();
+            if (!_config.Equals(YGConfig.GetDefaultConfig()))
+            {
+                _config.Dispose();
+            }
         }
 
         protected void RefreshConfig()

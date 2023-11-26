@@ -42,4 +42,3 @@ These configurations include toggling of experimental features and controlling h
 
 ## TODO
 [ ] Add property getter/setters in `FlexLayoutConfig`
-[ ] Add a way to setup the default Yoga configuration, possibly a boolean in `FlexLayoutConfig`

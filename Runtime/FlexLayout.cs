@@ -531,6 +531,10 @@ namespace Gilzoide.FlexUi
             {
                 layoutNode.SetConfig(_configuration.Config);
             }
+            else
+            {
+                layoutNode.SetConfig(YGConfig.GetDefaultConfig());
+            }
             // position
             layoutNode.StyleSetPositionType(_positionType);
             layoutNode.StyleSetPosition(Edge.Left, _positionLeft);
