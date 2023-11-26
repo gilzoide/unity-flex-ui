@@ -14,7 +14,7 @@ Flexbox support for [Unity UI](https://docs.unity3d.com/Packages/com.unity.ugui@
 ## How to install
 Install directly using the [Unity Package Manager](https://docs.unity3d.com/Manual/upm-ui-giturl.html) with the following URL:
 ```
-https://github.com/gilzoide/unity-flex-ui.git
+https://github.com/gilzoide/unity-flex-ui.git#1.0.0-preview1
 ```
 
 
