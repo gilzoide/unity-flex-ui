@@ -16,19 +16,21 @@ $(BUILD_DIRS):
 %/libyogacore.a:
 	$(CMAKE_BIN) -S yoga~/yoga -B $(dir $@) $(CMAKE_FLAGS)
 	$(CMAKE_BIN) --build $(dir $@)
+.PRECIOUS: %/libyogacore.a
 
 %/flex-ui.dll: LINKFLAGS += -shared
 %/flex-ui.dll: src~/flex-ui.cpp yoga~/%/libyogacore.a | %
 	$(CXX) -o $@ $^ -Iyoga~ $(CXXFLAGS) $(LINKFLAGS)
 
 %/flex-ui.so: CXXFLAGS += -fPIC
-%/flex-ui.so: LINKFLAGS += -shared
+%/flex-ui.so: LINKFLAGS += -shared "-Wl,--version-script,src~/link-version-script.txt"
 %/flex-ui.so: src~/flex-ui.cpp yoga~/%/libyogacore.a | %
 	$(CXX) -o $@ $^ -Iyoga~ $(CXXFLAGS) $(LINKFLAGS)
+	$(STRIP) -x $@
 
-%/flex-ui.dylib: LINKFLAGS += -shared
+%/flex-ui.dylib: LINKFLAGS += -shared "-Wl,-exported_symbol,*FlexUi_*"
 %/flex-ui.dylib: src~/flex-ui.cpp yoga~/%/libyogacore.a | %
-	$(CXX) -o $@ $^ -Iyoga~ $(CXXFLAGS) $(LINKFLAGS) "-Wl,-exported_symbol,*FlexUi_*"
+	$(CXX) -o $@ $^ -Iyoga~ $(CXXFLAGS) $(LINKFLAGS)
 	$(STRIP) -x $@
 
 # Windows
@@ -80,6 +82,7 @@ yoga~/build/android/%/libyogacore.a: CMAKE_FLAGS = \
 	-DCMAKE_CXX_COMPILER="$(CXX)"
 
 build/android/%/flex-ui.so: CXXFLAGS += -static-libstdc++
+build/android/%/flex-ui.so: STRIP = $(wildcard $(ANDROID_NDK_ROOT)/toolchains/llvm/prebuilt/*/bin/llvm-strip)
 
 build/android/arm64/flex-ui.so: CXX = $(wildcard $(ANDROID_NDK_ROOT)/toolchains/llvm/prebuilt/*/bin/aarch64-linux-android21-clang++)
 build/android/arm32/flex-ui.so: CXX = $(wildcard $(ANDROID_NDK_ROOT)/toolchains/llvm/prebuilt/*/bin/armv7a-linux-androideabi19-clang++)
