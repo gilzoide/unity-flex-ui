@@ -18,9 +18,10 @@ $(BUILD_DIRS):
 	$(CMAKE_BIN) --build $(dir $@)
 .PRECIOUS: %/libyogacore.a
 
-%/flex-ui.dll: LINKFLAGS += -shared
+%/flex-ui.dll: LINKFLAGS += -shared "-Wl,--version-script,src~/link-version-script.txt"
 %/flex-ui.dll: src~/flex-ui.cpp yoga~/%/libyogacore.a | %
 	$(CXX) -o $@ $^ -Iyoga~ $(CXXFLAGS) $(LINKFLAGS)
+	$(STRIP) -x $@
 
 %/flex-ui.so: CXXFLAGS += -fPIC
 %/flex-ui.so: LINKFLAGS += -shared "-Wl,--version-script,src~/link-version-script.txt"
@@ -36,11 +37,12 @@ $(BUILD_DIRS):
 # Windows
 yoga~/build/windows/%/libyogacore.a: CMAKE_FLAGS = \
 	-DCMAKE_BUILD_TYPE=Release \
-	-DCMAKE_CXX_FLAGS="$(CXXFLAGS)" \
 	-DCMAKE_CXX_COMPILER="$(CXX)"
 
 build/windows/x86_64/flex-ui.dll: CXX = x86_64-w64-mingw32-c++
+build/windows/x86_64/flex-ui.dll: STRIP = x86_64-w64-mingw32-strip
 build/windows/x86/flex-ui.dll: CXX = i686-w64-mingw32-c++
+build/windows/x86/flex-ui.dll: STRIP = i686-w64-mingw32-strip
 
 
 # Linux
