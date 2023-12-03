@@ -1,212 +1,248 @@
-#include <yoga/Yoga.h>
+///////////////////////////////////////////////////////////
+// Yoga
+///////////////////////////////////////////////////////////
+
+// Workaround to avoid exporting Yoga symbols
+#include <yoga/YGMacros.h>
+#undef YG_EXPORT
+#define YG_EXPORT
+
+#include <yoga/YGNodeStyle.cpp>
+#include <yoga/YGPixelGrid.cpp>
+#include <yoga/YGEnums.cpp>
+#include <yoga/YGValue.cpp>
+#include <yoga/YGConfig.cpp>
+#include <yoga/YGNode.cpp>
+#include <yoga/YGNodeLayout.cpp>
+#include <yoga/config/Config.cpp>
+#include <yoga/algorithm/CalculateLayout.cpp>
+#include <yoga/algorithm/PixelGrid.cpp>
+#include <yoga/algorithm/Cache.cpp>
+#include <yoga/algorithm/Baseline.cpp>
+#include <yoga/algorithm/FlexLine.cpp>
+#include <yoga/debug/Log.cpp>
+#include <yoga/debug/AssertFatal.cpp>
+#include <yoga/debug/NodeToString.cpp>
+#include <yoga/node/LayoutResults.cpp>
+#include <yoga/node/Node.cpp>
+
+// Workaround for ambiguous 'Node' definition
+#define Node _Node
+#include <yoga/event/event.cpp>
+#undef Node
+
+///////////////////////////////////////////////////////////
+// Flex UI
+///////////////////////////////////////////////////////////
+#define EXPORT __attribute__((visibility("default")))
 
 extern "C" {
 
-YGConfigRef FlexUi_ConfigNew() {
+EXPORT YGConfigRef FlexUi_ConfigNew() {
 	return YGConfigNew();
 }
 
-void FlexUi_ConfigFree(YGConfigRef config) {
+EXPORT void FlexUi_ConfigFree(YGConfigRef config) {
 	YGConfigFree(config);
 }
 
-YGConfigConstRef FlexUi_ConfigGetDefault() {
+EXPORT YGConfigConstRef FlexUi_ConfigGetDefault() {
 	return YGConfigGetDefault();
 }
 
-void FlexUi_ConfigSetPointScaleFactor(YGConfigRef config, float enabled) {
+EXPORT void FlexUi_ConfigSetPointScaleFactor(YGConfigRef config, float enabled) {
 	YGConfigSetPointScaleFactor(config, enabled);
 }
 
-void FlexUi_ConfigSetErrata(YGConfigRef config, YGErrata errata) {
+EXPORT void FlexUi_ConfigSetErrata(YGConfigRef config, YGErrata errata) {
 	YGConfigSetErrata(config, errata);
 }
 
-void FlexUi_ConfigSetExperimentalFeatureEnabled(YGConfigRef config, YGExperimentalFeature feature, bool enabled) {
+EXPORT void FlexUi_ConfigSetExperimentalFeatureEnabled(YGConfigRef config, YGExperimentalFeature feature, bool enabled) {
 	YGConfigSetExperimentalFeatureEnabled(config, feature, enabled);
 }
 
-YGNodeRef FlexUi_NodeNew() {
+EXPORT YGNodeRef FlexUi_NodeNew() {
 	return YGNodeNew();
 }
 
-void FlexUi_NodeFree(YGNodeRef node) {
+EXPORT void FlexUi_NodeFree(YGNodeRef node) {
 	YGNodeFree(node);
 }
 
-void FlexUi_NodeCalculateLayout(YGNodeRef node, float availableWidth, float availableHeight, YGDirection ownerDirection) {
+EXPORT void FlexUi_NodeCalculateLayout(YGNodeRef node, float availableWidth, float availableHeight, YGDirection ownerDirection) {
 	YGNodeCalculateLayout(node, availableWidth, availableHeight, ownerDirection);
 }
 
-void FlexUi_NodeInsertChild(YGNodeRef node, YGNodeRef child, int index) {
+EXPORT void FlexUi_NodeInsertChild(YGNodeRef node, YGNodeRef child, int index) {
 	YGNodeInsertChild(node, child, index);
 }
 
-void FlexUi_NodeRemoveChild(YGNodeRef node, YGNodeRef child) {
+EXPORT void FlexUi_NodeRemoveChild(YGNodeRef node, YGNodeRef child) {
 	YGNodeRemoveChild(node, child);
 }
 
-void FlexUi_NodeRemoveAllChildren(YGNodeRef node) {
+EXPORT void FlexUi_NodeRemoveAllChildren(YGNodeRef node) {
 	YGNodeRemoveAllChildren(node);
 }
 
-void FlexUi_NodeSetConfig(YGNodeRef node, YGConfigRef config) {
+EXPORT void FlexUi_NodeSetConfig(YGNodeRef node, YGConfigRef config) {
 	YGNodeSetConfig(node, config);
 }
 
-float FlexUi_NodeLayoutGetLeft(YGNodeConstRef node) {
+EXPORT float FlexUi_NodeLayoutGetLeft(YGNodeConstRef node) {
 	return YGNodeLayoutGetLeft(node);
 }
 
-float FlexUi_NodeLayoutGetTop(YGNodeConstRef node) {
+EXPORT float FlexUi_NodeLayoutGetTop(YGNodeConstRef node) {
 	return YGNodeLayoutGetTop(node);
 }
 
-float FlexUi_NodeLayoutGetWidth(YGNodeConstRef node) {
+EXPORT float FlexUi_NodeLayoutGetWidth(YGNodeConstRef node) {
 	return YGNodeLayoutGetWidth(node);
 }
 
-float FlexUi_NodeLayoutGetHeight(YGNodeConstRef node) {
+EXPORT float FlexUi_NodeLayoutGetHeight(YGNodeConstRef node) {
 	return YGNodeLayoutGetHeight(node);
 }
 
-void FlexUi_NodeStyleSetDirection(YGNodeRef node, YGDirection direction) {
+EXPORT void FlexUi_NodeStyleSetDirection(YGNodeRef node, YGDirection direction) {
 	YGNodeStyleSetDirection(node, direction);
 }
 
-void FlexUi_NodeStyleSetFlexDirection(YGNodeRef node, YGFlexDirection flexDirection) {
+EXPORT void FlexUi_NodeStyleSetFlexDirection(YGNodeRef node, YGFlexDirection flexDirection) {
 	YGNodeStyleSetFlexDirection(node, flexDirection);
 }
 
-void FlexUi_NodeStyleSetJustifyContent(YGNodeRef node, YGJustify justifyContent) {
+EXPORT void FlexUi_NodeStyleSetJustifyContent(YGNodeRef node, YGJustify justifyContent) {
 	YGNodeStyleSetJustifyContent(node, justifyContent);
 }
 
-void FlexUi_NodeStyleSetAlignContent(YGNodeRef node, YGAlign alignContent) {
+EXPORT void FlexUi_NodeStyleSetAlignContent(YGNodeRef node, YGAlign alignContent) {
 	YGNodeStyleSetAlignContent(node, alignContent);
 }
 
-void FlexUi_NodeStyleSetAlignItems(YGNodeRef node, YGAlign alignItems) {
+EXPORT void FlexUi_NodeStyleSetAlignItems(YGNodeRef node, YGAlign alignItems) {
 	YGNodeStyleSetAlignItems(node, alignItems);
 }
 
-void FlexUi_NodeStyleSetAlignSelf(YGNodeRef node, YGAlign alignSelf) {
+EXPORT void FlexUi_NodeStyleSetAlignSelf(YGNodeRef node, YGAlign alignSelf) {
 	YGNodeStyleSetAlignSelf(node, alignSelf);
 }
 
-void FlexUi_NodeStyleSetPositionType(YGNodeRef node, YGPositionType positionType) {
+EXPORT void FlexUi_NodeStyleSetPositionType(YGNodeRef node, YGPositionType positionType) {
 	YGNodeStyleSetPositionType(node, positionType);
 }
 
-void FlexUi_NodeStyleSetFlexWrap(YGNodeRef node, YGWrap flexWrap) {
+EXPORT void FlexUi_NodeStyleSetFlexWrap(YGNodeRef node, YGWrap flexWrap) {
 	YGNodeStyleSetFlexWrap(node, flexWrap);
 }
 
-void FlexUi_NodeStyleSetFlexGrow(YGNodeRef node, float flexGrow) {
+EXPORT void FlexUi_NodeStyleSetFlexGrow(YGNodeRef node, float flexGrow) {
 	YGNodeStyleSetFlexGrow(node, flexGrow);
 }
 
-void FlexUi_NodeStyleSetFlexShrink(YGNodeRef node, float flexShrink) {
+EXPORT void FlexUi_NodeStyleSetFlexShrink(YGNodeRef node, float flexShrink) {
 	YGNodeStyleSetFlexShrink(node, flexShrink);
 }
 
-void FlexUi_NodeStyleSetFlexBasis(YGNodeRef node, float flexBasis) {
+EXPORT void FlexUi_NodeStyleSetFlexBasis(YGNodeRef node, float flexBasis) {
 	YGNodeStyleSetFlexBasis(node, flexBasis);
 }
 
-void FlexUi_NodeStyleSetFlexBasisPercent(YGNodeRef node, float flexBasis) {
+EXPORT void FlexUi_NodeStyleSetFlexBasisPercent(YGNodeRef node, float flexBasis) {
 	YGNodeStyleSetFlexBasisPercent(node, flexBasis);
 }
 
-void FlexUi_NodeStyleSetFlexBasisAuto(YGNodeRef node) {
+EXPORT void FlexUi_NodeStyleSetFlexBasisAuto(YGNodeRef node) {
 	YGNodeStyleSetFlexBasisAuto(node);
 }
 
-void FlexUi_NodeStyleSetPosition(YGNodeRef node, YGEdge edge, float position) {
+EXPORT void FlexUi_NodeStyleSetPosition(YGNodeRef node, YGEdge edge, float position) {
 	YGNodeStyleSetPosition(node, edge, position);
 }
 
-void FlexUi_NodeStyleSetPositionPercent(YGNodeRef node, YGEdge edge, float position) {
+EXPORT void FlexUi_NodeStyleSetPositionPercent(YGNodeRef node, YGEdge edge, float position) {
 	YGNodeStyleSetPositionPercent(node, edge, position);
 }
 
-void FlexUi_NodeStyleSetMargin(YGNodeRef node, YGEdge edge, float margin) {
+EXPORT void FlexUi_NodeStyleSetMargin(YGNodeRef node, YGEdge edge, float margin) {
 	YGNodeStyleSetMargin(node, edge, margin);
 }
 
-void FlexUi_NodeStyleSetMarginPercent(YGNodeRef node, YGEdge edge, float margin) {
+EXPORT void FlexUi_NodeStyleSetMarginPercent(YGNodeRef node, YGEdge edge, float margin) {
 	YGNodeStyleSetMarginPercent(node, edge, margin);
 }
 
-void FlexUi_NodeStyleSetMarginAuto(YGNodeRef node, YGEdge edge) {
+EXPORT void FlexUi_NodeStyleSetMarginAuto(YGNodeRef node, YGEdge edge) {
 	YGNodeStyleSetMarginAuto(node, edge);
 }
 
-void FlexUi_NodeStyleSetPadding(YGNodeRef node, YGEdge edge, float padding) {
+EXPORT void FlexUi_NodeStyleSetPadding(YGNodeRef node, YGEdge edge, float padding) {
 	YGNodeStyleSetPadding(node, edge, padding);
 }
 
-void FlexUi_NodeStyleSetPaddingPercent(YGNodeRef node, YGEdge edge, float padding) {
+EXPORT void FlexUi_NodeStyleSetPaddingPercent(YGNodeRef node, YGEdge edge, float padding) {
 	YGNodeStyleSetPaddingPercent(node, edge, padding);
 }
 
-void FlexUi_NodeStyleSetWidth(YGNodeRef node, float width) {
+EXPORT void FlexUi_NodeStyleSetWidth(YGNodeRef node, float width) {
 	YGNodeStyleSetWidth(node, width);
 }
 
-void FlexUi_NodeStyleSetWidthPercent(YGNodeRef node, float width) {
+EXPORT void FlexUi_NodeStyleSetWidthPercent(YGNodeRef node, float width) {
 	YGNodeStyleSetWidthPercent(node, width);
 }
 
-void FlexUi_NodeStyleSetWidthAuto(YGNodeRef node) {
+EXPORT void FlexUi_NodeStyleSetWidthAuto(YGNodeRef node) {
 	YGNodeStyleSetWidthAuto(node);
 }
 
-void FlexUi_NodeStyleSetHeight(YGNodeRef node, float height) {
+EXPORT void FlexUi_NodeStyleSetHeight(YGNodeRef node, float height) {
 	YGNodeStyleSetHeight(node, height);
 }
 
-void FlexUi_NodeStyleSetHeightPercent(YGNodeRef node, float height) {
+EXPORT void FlexUi_NodeStyleSetHeightPercent(YGNodeRef node, float height) {
 	YGNodeStyleSetHeightPercent(node, height);
 }
 
-void FlexUi_NodeStyleSetHeightAuto(YGNodeRef node) {
+EXPORT void FlexUi_NodeStyleSetHeightAuto(YGNodeRef node) {
 	YGNodeStyleSetHeightAuto(node);
 }
 
-void FlexUi_NodeStyleSetMinWidth(YGNodeRef node, float minWidth) {
+EXPORT void FlexUi_NodeStyleSetMinWidth(YGNodeRef node, float minWidth) {
 	YGNodeStyleSetMinWidth(node, minWidth);
 }
 
-void FlexUi_NodeStyleSetMinWidthPercent(YGNodeRef node, float minWidth) {
+EXPORT void FlexUi_NodeStyleSetMinWidthPercent(YGNodeRef node, float minWidth) {
 	YGNodeStyleSetMinWidthPercent(node, minWidth);
 }
 
-void FlexUi_NodeStyleSetMinHeight(YGNodeRef node, float minHeight) {
+EXPORT void FlexUi_NodeStyleSetMinHeight(YGNodeRef node, float minHeight) {
 	YGNodeStyleSetMinHeight(node, minHeight);
 }
 
-void FlexUi_NodeStyleSetMinHeightPercent(YGNodeRef node, float minHeight) {
+EXPORT void FlexUi_NodeStyleSetMinHeightPercent(YGNodeRef node, float minHeight) {
 	YGNodeStyleSetMinHeightPercent(node, minHeight);
 }
 
-void FlexUi_NodeStyleSetMaxWidth(YGNodeRef node, float maxWidth) {
+EXPORT void FlexUi_NodeStyleSetMaxWidth(YGNodeRef node, float maxWidth) {
 	YGNodeStyleSetMaxWidth(node, maxWidth);
 }
 
-void FlexUi_NodeStyleSetMaxWidthPercent(YGNodeRef node, float maxWidth) {
+EXPORT void FlexUi_NodeStyleSetMaxWidthPercent(YGNodeRef node, float maxWidth) {
 	YGNodeStyleSetMaxWidthPercent(node, maxWidth);
 }
 
-void FlexUi_NodeStyleSetMaxHeight(YGNodeRef node, float maxHeight) {
+EXPORT void FlexUi_NodeStyleSetMaxHeight(YGNodeRef node, float maxHeight) {
 	YGNodeStyleSetMaxHeight(node, maxHeight);
 }
 
-void FlexUi_NodeStyleSetMaxHeightPercent(YGNodeRef node, float maxHeight) {
+EXPORT void FlexUi_NodeStyleSetMaxHeightPercent(YGNodeRef node, float maxHeight) {
 	YGNodeStyleSetMaxHeightPercent(node, maxHeight);
 }
 
-void FlexUi_NodeStyleSetAspectRatio(YGNodeRef node, float aspectRatio) {
+EXPORT void FlexUi_NodeStyleSetAspectRatio(YGNodeRef node, float aspectRatio) {
 	YGNodeStyleSetAspectRatio(node, aspectRatio);
 }
 

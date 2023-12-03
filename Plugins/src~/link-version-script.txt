@@ -1,4 +1,0 @@
-{
-  global: FlexUi_*;
-  local: *;
-};
