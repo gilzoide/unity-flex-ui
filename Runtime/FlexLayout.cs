@@ -31,13 +31,13 @@ namespace Gilzoide.FlexUi
 
         [FoldoutHeader("Alignment")]
         [SerializeField] private Justify _justifyContent = Justify.FlexStart;
-        [SerializeField] private Align _alignItems = Align.Auto;
+        [SerializeField] private Align _alignItems = Align.FlexStart;
         [SerializeField] private Align _alignSelf = Align.Auto;
         [SerializeField] private Align _alignContent = Align.Auto;
 
         [FoldoutHeader("Size")]
-        [SerializeField] private YGValue _width = 100;
-        [SerializeField] private YGValue _height = 100;
+        [SerializeField] private YGValue _width = YGValue.Auto;
+        [SerializeField] private YGValue _height = YGValue.Auto;
         [SerializeField] private YGValue _minWidth = YGValue.Undefined;
         [SerializeField] private YGValue _minHeight = YGValue.Undefined;
         [SerializeField] private YGValue _maxWidth = YGValue.Undefined;
@@ -678,6 +678,21 @@ namespace Gilzoide.FlexUi
             base.OnValidate();
             UpdateNodeStyle();
             RefreshRootLayout();
+        }
+
+        protected override void Reset()
+        {
+            base.Reset();
+            if (IsRootLayoutNode)
+            {
+                Width = Height = YGValue.Auto;
+            }
+            else
+            {
+                Vector2 size = RectTransform.rect.size;
+                Width = size.x;
+                Height = size.y;
+            }
         }
 #endif
     }
