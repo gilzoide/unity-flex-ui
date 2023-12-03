@@ -1,122 +1,92 @@
-CMAKE_BIN ?= cmake
+STRIP ?= strip
+EMCXX ?= em++
+SED ?= sed
+
 ANDROID_NDK_ROOT ?=
 
+LINKFLAGS += -shared
+CXXFLAGS += -Iyoga~ -std=c++20 -fvisibility=hidden
+ifeq ($(DEBUG),1)
+	CXXFLAGS += -O0 -g
+else
+	CXXFLAGS += -O2
+endif
+
 BUILD_DIRS = \
-	windows/x86_64 windows/x86 \
-	linux/x86_64 linux/x86 \
-	osx ios tvos \
-	android/arm64 android/arm32 android/x86 android/x86_64
+	build/windows/x86_64 build/windows/x86 \
+	build/linux/x86_64 build/linux/x86 \
+	build/macos build/ios build/tvos \
+	build/android/arm64 build/android/arm32 build/android/x86 build/android/x86_64 \
+	build/webgl
 
 # Misc
 $(BUILD_DIRS):
 	mkdir -p $@
 
+%/flex-ui.dll: src~/flex-ui.cpp | %
+	$(CXX) -o $@ $^ $(CXXFLAGS) $(LINKFLAGS)
+	$(STRIP) -x $@
+
+%/flex-ui.so: CXXFLAGS += -fPIC
+%/flex-ui.so: src~/flex-ui.cpp | %
+	$(CXX) -o $@ $^ $(CXXFLAGS) $(LINKFLAGS)
+	$(STRIP) -x $@
+
+%/flex-ui.dylib: src~/flex-ui.cpp | %
+	$(CXX) -o $@ $^ $(CXXFLAGS) $(LINKFLAGS)
+	$(STRIP) -x $@
 
 # Windows
-yoga~/build/windows/%/libyogacore.a: CMAKE_FLAGS = \
-	-DCMAKE_BUILD_TYPE=Release \
-	-DCMAKE_CXX_FLAGS="$(CXXFLAGS)" \
-	-DCMAKE_CXX_COMPILER="$(CXX)"
-yoga~/build/windows/%/libyogacore.a:
-	$(CMAKE_BIN) -S yoga~/yoga -B $(dir $@) $(CMAKE_FLAGS)
-	$(CMAKE_BIN) --build $(dir $@)
+build/windows/x86_64/flex-ui.dll: CXX = x86_64-w64-mingw32-c++
+build/windows/x86_64/flex-ui.dll: STRIP = x86_64-w64-mingw32-strip
 
-windows/%/flex-ui.dll: LINKFLAGS += -shared
-windows/%/flex-ui.dll: yoga~/build/windows/%/libyogacore.a | windows/%
-	$(CXX) -o $@ -Wl,--whole-archive $< -Wl,--no-whole-archive $(CXXFLAGS) $(LINKFLAGS)
-
-windows/x86_64/flex-ui.dll: CXX = x86_64-w64-mingw32-c++
-windows/x86/flex-ui.dll: CXX = i686-w64-mingw32-c++
-
+build/windows/x86/flex-ui.dll: CXX = i686-w64-mingw32-c++
+build/windows/x86/flex-ui.dll: STRIP = i686-w64-mingw32-strip
 
 # Linux
-yoga~/build/linux/%/libyogacore.a: CMAKE_FLAGS = \
-	-DCMAKE_BUILD_TYPE=Release \
-	-DCMAKE_CXX_FLAGS="$(CXXFLAGS)"
-yoga~/build/linux/%/libyogacore.a:
-	$(CMAKE_BIN) -S yoga~/yoga -B $(dir $@) $(CMAKE_FLAGS)
-	$(CMAKE_BIN) --build $(dir $@)
-
-linux/%/flex-ui.so: CXXFLAGS += -fPIC
-linux/%/flex-ui.so: LINKFLAGS += -shared
-linux/%/flex-ui.so: yoga~/build/linux/%/libyogacore.a | linux/%
-	$(CXX) -o $@ -Wl,--whole-archive $< -Wl,--no-whole-archive $(CXXFLAGS) $(LINKFLAGS)
-
-linux/x86/flex-ui.so: CXXFLAGS += -m32
-
+build/linux/x86/flex-ui.so: CXXFLAGS += -m32
 
 # macOS
-yoga~/build/macos/libyogacore.a: CMAKE_FLAGS = \
-	-DCMAKE_BUILD_TYPE=Release \
-	-DCMAKE_OSX_ARCHITECTURES="arm64;x86_64"
-yoga~/build/macos/libyogacore.a:
-	$(CMAKE_BIN) -S yoga~/yoga -B $(dir $@) $(CMAKE_FLAGS)
-	$(CMAKE_BIN) --build $(dir $@)
-
-osx/flex-ui.dylib: CXXFLAGS += -arch x86_64 -arch arm64
-osx/flex-ui.dylib: LINKFLAGS += -shared -Wl,-all_load
-osx/flex-ui.dylib: yoga~/build/macos/libyogacore.a | osx
-	$(CXX) -o $@ $< $(CXXFLAGS) $(LINKFLAGS)
-
+build/macos/flex-ui.dylib: CXXFLAGS += -arch x86_64 -arch arm64
 
 # iOS
-yoga~/build/ios/libyogacore.a: CMAKE_FLAGS = \
-	-DCMAKE_OSX_ARCHITECTURES="arm64" \
-	-DCMAKE_BUILD_TYPE=Release \
-	-DCMAKE_OSX_SYSROOT=iphoneos
-yoga~/build/ios/libyogacore.a:
-	$(CMAKE_BIN) -S yoga~/yoga -B $(dir $@) $(CMAKE_FLAGS)
-	$(CMAKE_BIN) --build $(dir $@)
-
-ios/flex-ui.dylib: CXXFLAGS += -arch arm64 -isysroot $(shell xcrun --show-sdk-path --sdk iphoneos)
-ios/flex-ui.dylib: LINKFLAGS += -shared -Wl,-all_load
-ios/flex-ui.dylib: yoga~/build/ios/libyogacore.a | ios
-	$(CXX) -o $@ $< $(CXXFLAGS) $(LINKFLAGS)
-
+build/ios/flex-ui.dylib: CXXFLAGS += -arch arm64 -isysroot $(shell xcrun --show-sdk-path --sdk iphoneos)
 
 # tvOS
-yoga~/build/tvos/libyogacore.a: CMAKE_FLAGS = \
-	-DCMAKE_OSX_ARCHITECTURES="arm64" \
-	-DCMAKE_BUILD_TYPE=Release \
-	-DCMAKE_OSX_SYSROOT=appletvos
-yoga~/build/tvos/libyogacore.a:
-	$(CMAKE_BIN) -S yoga~/yoga -B $(dir $@) $(CMAKE_FLAGS)
-	$(CMAKE_BIN) --build $(dir $@)
-
-tvos/flex-ui.dylib: CXXFLAGS += -arch arm64 -isysroot $(shell xcrun --show-sdk-path --sdk appletvos)
-tvos/flex-ui.dylib: LINKFLAGS += -shared -Wl,-all_load
-tvos/flex-ui.dylib: yoga~/build/tvos/libyogacore.a | tvos
-	$(CXX) -o $@ $< $(CXXFLAGS) $(LINKFLAGS)
-
+build/tvos/flex-ui.dylib: CXXFLAGS += -arch arm64 -isysroot $(shell xcrun --show-sdk-path --sdk appletvos)
 
 # Android
-yoga~/build/android/%/libyogacore.a: CMAKE_FLAGS = \
-	-DCMAKE_BUILD_TYPE=Release \
-	-DCMAKE_CXX_COMPILER="$(CXX)"
-yoga~/build/android/%/libyogacore.a:
-	$(CMAKE_BIN) -S yoga~/yoga -B $(dir $@) $(CMAKE_FLAGS)
-	$(CMAKE_BIN) --build $(dir $@)
+build/android/%/flex-ui.so: CXXFLAGS += -static-libstdc++
+build/android/%/flex-ui.so: STRIP = $(wildcard $(ANDROID_NDK_ROOT)/toolchains/llvm/prebuilt/*/bin/llvm-strip)
 
-android/%/flex-ui.so: CXXFLAGS += -fPIC -static-libstdc++
-android/%/flex-ui.so: LINKFLAGS += -shared
-android/%/flex-ui.so: yoga~/build/android/%/libyogacore.a | android/%
-	$(CXX) -o $@ -Wl,--whole-archive $< -Wl,--no-whole-archive $(CXXFLAGS) $(LINKFLAGS)
+build/android/arm64/flex-ui.so: CXX = $(wildcard $(ANDROID_NDK_ROOT)/toolchains/llvm/prebuilt/*/bin/aarch64-linux-android21-clang++)
+build/android/arm32/flex-ui.so: CXX = $(wildcard $(ANDROID_NDK_ROOT)/toolchains/llvm/prebuilt/*/bin/armv7a-linux-androideabi19-clang++)
+build/android/x86_64/flex-ui.so: CXX = $(wildcard $(ANDROID_NDK_ROOT)/toolchains/llvm/prebuilt/*/bin/x86_64-linux-android21-clang++)
+build/android/x86/flex-ui.so: CXX = $(wildcard $(ANDROID_NDK_ROOT)/toolchains/llvm/prebuilt/*/bin/i686-linux-android19-clang++)
 
-android/arm64/flex-ui.so: CXX = $(wildcard $(ANDROID_NDK_ROOT)/toolchains/llvm/prebuilt/*/bin/aarch64-linux-android21-clang++)
-android/arm32/flex-ui.so: CXX = $(wildcard $(ANDROID_NDK_ROOT)/toolchains/llvm/prebuilt/*/bin/armv7a-linux-androideabi19-clang++)
-android/x86_64/flex-ui.so: CXX = $(wildcard $(ANDROID_NDK_ROOT)/toolchains/llvm/prebuilt/*/bin/x86_64-linux-android21-clang++)
-android/x86/flex-ui.so: CXX = $(wildcard $(ANDROID_NDK_ROOT)/toolchains/llvm/prebuilt/*/bin/i686-linux-android19-clang++)
-
+# WebGL
+build/webgl/flex-ui.bc: src~/flex-ui.cpp | build/webgl
+# Workaround: prepend Yoga symbols with a '_' to avoid build errors,
+# since Unity already exports some of them (used by UI Toolkit).
+# C++ -> LLVM IR -> rename functions in text -> LLVM Bitcode
+	$(EMCXX) -c $< $(CXXFLAGS) -emit-llvm -S -o - \
+		| $(SED) -e 's/@YG/@_YG/' \
+		| $(EMCXX) -o $@ -c -emit-llvm -x ir -
 
 # Targets
-windows-x86_64: windows/x86_64/flex-ui.dll
-windows-x86: windows/x86/flex-ui.dll
-linux-x86_64: linux/x86_64/flex-ui.so
-linux-x86: linux/x86/flex-ui.so
-macos-universal: osx/flex-ui.dylib
-ios-arm64: ios/flex-ui.dylib
-tvos-arm64: tvos/flex-ui.dylib
-android-arm64: android/arm64/flex-ui.so
-android-arm32: android/arm32/flex-ui.so
-android-x86_64: android/x86_64/flex-ui.so
-android-x86: android/x86/flex-ui.so
+windows-x86_64: build/windows/x86_64/flex-ui.dll
+windows-x86: build/windows/x86/flex-ui.dll
+
+linux-x86_64: build/linux/x86_64/flex-ui.so
+linux-x86: build/linux/x86/flex-ui.so
+
+macos-universal: build/macos/flex-ui.dylib
+ios-arm64: build/ios/flex-ui.dylib
+tvos-arm64: build/tvos/flex-ui.dylib
+
+android-arm64: build/android/arm64/flex-ui.so
+android-arm32: build/android/arm32/flex-ui.so
+android-x86_64: build/android/x86_64/flex-ui.so
+android-x86: build/android/x86/flex-ui.so
+
+webgl: build/webgl/flex-ui.bc

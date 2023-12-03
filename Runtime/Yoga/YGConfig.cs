@@ -51,43 +51,11 @@ namespace Gilzoide.FlexUi.Yoga
             }
         }
 
-        public void SetUseWebDefaults(bool enabled)
-        {
-            if (!IsNull)
-            {
-                Yoga.YGConfigSetUseWebDefaults(_configPtr, enabled);
-            }
-        }
-
-        public bool GetUseWebDefaults()
-        {
-            if (!IsNull)
-            {
-                return Yoga.YGConfigGetUseWebDefaults(_configPtr);
-            }
-            else
-            {
-                return default;
-            }
-        }
-
         public void SetPointScaleFactor(float enabled)
         {
             if (!IsNull)
             {
                 Yoga.YGConfigSetPointScaleFactor(_configPtr, enabled);
-            }
-        }
-
-        public float GetPointScaleFactor()
-        {
-            if (!IsNull)
-            {
-                return Yoga.YGConfigGetPointScaleFactor(_configPtr);
-            }
-            else
-            {
-                return default;
             }
         }
 
@@ -99,35 +67,11 @@ namespace Gilzoide.FlexUi.Yoga
             }
         }
 
-        public Errata GetErrata()
-        {
-            if (!IsNull)
-            {
-                return Yoga.YGConfigGetErrata(_configPtr);
-            }
-            else
-            {
-                return default;
-            }
-        }
-
         public void SetExperimentalFeatureEnabled(ExperimentalFeature feature, bool enabled)
         {
             if (!IsNull)
             {
                 Yoga.YGConfigSetExperimentalFeatureEnabled(_configPtr, feature, enabled);
-            }
-        }
-
-        public bool IsExperimentalFeatureEnabled(ExperimentalFeature feature)
-        {
-            if (!IsNull)
-            {
-                return Yoga.YGConfigIsExperimentalFeatureEnabled(_configPtr, feature);
-            }
-            else
-            {
-                return default;
             }
         }
 
