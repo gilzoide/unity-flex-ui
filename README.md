@@ -6,7 +6,7 @@ Flexbox support for [Unity UI](https://docs.unity3d.com/Packages/com.unity.ugui@
 ![Flex Layout demo](Extras~/demo.gif)
 
 ## Features
-- Supported platforms: Windows, Linux, macOS, iOS, tvOS and Android
+- Supported platforms: Windows, Linux, macOS, iOS, tvOS, Android and WebGL
 - There is a single component you need: [FlexLayout](Runtime/FlexLayout.cs)
 - Live updates in edit mode.
 - `FlexLayout` only lays out children that also have a `FlexLayout` component, so you can still use anchors and other Layout Elements where necessary.

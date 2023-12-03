@@ -1,4 +1,6 @@
 STRIP ?= strip
+EMCXX ?= em++
+SED ?= sed
 
 ANDROID_NDK_ROOT ?=
 
@@ -14,7 +16,8 @@ BUILD_DIRS = \
 	build/windows/x86_64 build/windows/x86 \
 	build/linux/x86_64 build/linux/x86 \
 	build/macos build/ios build/tvos \
-	build/android/arm64 build/android/arm32 build/android/x86 build/android/x86_64
+	build/android/arm64 build/android/arm32 build/android/x86 build/android/x86_64 \
+	build/webgl
 
 # Misc
 $(BUILD_DIRS):
@@ -61,6 +64,14 @@ build/android/arm32/flex-ui.so: CXX = $(wildcard $(ANDROID_NDK_ROOT)/toolchains/
 build/android/x86_64/flex-ui.so: CXX = $(wildcard $(ANDROID_NDK_ROOT)/toolchains/llvm/prebuilt/*/bin/x86_64-linux-android21-clang++)
 build/android/x86/flex-ui.so: CXX = $(wildcard $(ANDROID_NDK_ROOT)/toolchains/llvm/prebuilt/*/bin/i686-linux-android19-clang++)
 
+# WebGL
+build/webgl/flex-ui.bc: src~/flex-ui.cpp | build/webgl
+# Workaround: prepend Yoga symbols with a '_' to avoid build errors,
+# since Unity already exports some of them (used by UI Toolkit).
+# C++ -> LLVM IR -> rename functions in text -> LLVM Bitcode
+	$(EMCXX) -c $< $(CXXFLAGS) -emit-llvm -S -o - \
+		| $(SED) -e 's/@YG/@_YG/' \
+		| $(EMCXX) -o $@ -c -emit-llvm -x ir -
 
 # Targets
 windows-x86_64: build/windows/x86_64/flex-ui.dll
@@ -77,3 +88,5 @@ android-arm64: build/android/arm64/flex-ui.so
 android-arm32: build/android/arm32/flex-ui.so
 android-x86_64: build/android/x86_64/flex-ui.so
 android-x86: build/android/x86/flex-ui.so
+
+webgl: build/webgl/flex-ui.bc
