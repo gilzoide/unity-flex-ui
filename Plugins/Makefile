@@ -36,13 +36,6 @@ $(BUILD_DIRS):
 	$(CXX) -o $@ $^ $(CXXFLAGS) $(LINKFLAGS)
 	$(STRIP) -x $@
 
-# Windows
-build/windows/x86_64/flex-ui.dll: CXX = x86_64-w64-mingw32-c++
-build/windows/x86_64/flex-ui.dll: STRIP = x86_64-w64-mingw32-strip
-
-build/windows/x86/flex-ui.dll: CXX = i686-w64-mingw32-c++
-build/windows/x86/flex-ui.dll: STRIP = i686-w64-mingw32-strip
-
 # Linux
 build/linux/x86/flex-ui.so: CXXFLAGS += -m32
 
@@ -76,6 +69,14 @@ build/webgl/flex-ui.bc: src~/flex-ui.cpp | build/webgl
 # Targets
 windows-x86_64: build/windows/x86_64/flex-ui.dll
 windows-x86: build/windows/x86/flex-ui.dll
+
+windows-x86_64-mingw: CXX = x86_64-w64-mingw32-c++
+windows-x86_64-mingw: STRIP = x86_64-w64-mingw32-strip
+windows-x86_64-mingw: build/windows/x86/flex-ui.dll
+
+windows-x86-mingw: CXX = i686-w64-mingw32-c++
+windows-x86-mingw: STRIP = i686-w64-mingw32-strip
+windows-x86-mingw: build/windows/x86/flex-ui.dll
 
 linux-x86_64: build/linux/x86_64/flex-ui.so
 linux-x86: build/linux/x86/flex-ui.so
