@@ -70,13 +70,15 @@ build/webgl/flex-ui.bc: src~/flex-ui.cpp | build/webgl
 windows-x86_64: build/windows/x86_64/flex-ui.dll
 windows-x86: build/windows/x86/flex-ui.dll
 
-windows-x86_64-mingw: CXX = x86_64-w64-mingw32-c++
-windows-x86_64-mingw: STRIP = x86_64-w64-mingw32-strip
-windows-x86_64-mingw: build/windows/x86/flex-ui.dll
+windows-mingw-x86_64: CXX = x86_64-w64-mingw32-c++
+windows-mingw-x86_64: STRIP = x86_64-w64-mingw32-strip
+windows-mingw-x86_64: LINKFLAGS += -static-libgcc -Wl,-Bstatic -lstdc++ -lpthread -Wl,-Bdynamic
+windows-mingw-x86_64: build/windows/x86_64/flex-ui.dll
 
-windows-x86-mingw: CXX = i686-w64-mingw32-c++
-windows-x86-mingw: STRIP = i686-w64-mingw32-strip
-windows-x86-mingw: build/windows/x86/flex-ui.dll
+windows-mingw-x86: CXX = i686-w64-mingw32-c++
+windows-mingw-x86: STRIP = i686-w64-mingw32-strip
+windows-mingw-x86: LINKFLAGS += -static-libgcc -Wl,-Bstatic -lstdc++ -lpthread -Wl,-Bdynamic
+windows-mingw-x86: build/windows/x86/flex-ui.dll
 
 linux-x86_64: build/linux/x86_64/flex-ui.so
 linux-x86: build/linux/x86/flex-ui.so
