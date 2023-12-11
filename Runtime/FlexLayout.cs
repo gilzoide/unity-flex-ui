@@ -580,15 +580,13 @@ namespace Gilzoide.FlexUi
             {
                 if (parentNode != _parentNode)
                 {
-                    if (_parentNode)
-                    {
-                        _parentNode.UntrackChild(this);
-                    }
+                    ClearParent();
                     parentNode.TrackChild(this);
                 }
             }
             else
             {
+                ClearParent();
                 _parentNode = null;
             }
         }
