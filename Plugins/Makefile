@@ -15,7 +15,7 @@ endif
 BUILD_DIRS = \
 	build/windows/x86_64 build/windows/x86 \
 	build/linux/x86_64 build/linux/x86 \
-	build/macos build/ios build/tvos \
+	build/macos build/ios build/tvos build/visionos \
 	build/android/arm64 build/android/arm32 build/android/x86 build/android/x86_64 \
 	build/webgl
 
@@ -47,6 +47,9 @@ build/ios/flex-ui.dylib: CXXFLAGS += -arch arm64 -isysroot $(shell xcrun --show-
 
 # tvOS
 build/tvos/flex-ui.dylib: CXXFLAGS += -arch arm64 -isysroot $(shell xcrun --show-sdk-path --sdk appletvos)
+
+# visionOS
+build/visionos/flex-ui.dylib: CXXFLAGS += -arch arm64 -isysroot $(shell xcrun --show-sdk-path --sdk xros)
 
 # Android
 build/android/%/flex-ui.so: CXXFLAGS += -static-libstdc++
@@ -86,6 +89,7 @@ linux-x86: build/linux/x86/flex-ui.so
 macos-universal: build/macos/flex-ui.dylib
 ios-arm64: build/ios/flex-ui.dylib
 tvos-arm64: build/tvos/flex-ui.dylib
+visionos-arm64: build/visionos/flex-ui.dylib
 
 android-arm64: build/android/arm64/flex-ui.so
 android-arm32: build/android/arm32/flex-ui.so
