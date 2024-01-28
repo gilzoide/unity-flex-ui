@@ -14,7 +14,7 @@ endif
 
 BUILD_DIRS = \
 	build/windows/x86_64 build/windows/x86 \
-	build/linux/x86_64 build/linux/x86 \
+	build/linux/x86_64 \
 	build/macos build/ios build/tvos build/visionos \
 	build/android/arm64 build/android/arm32 build/android/x86 build/android/x86_64 \
 	build/webgl
@@ -35,9 +35,6 @@ $(BUILD_DIRS):
 %/flex-ui.dylib: src~/flex-ui.cpp | %
 	$(CXX) -o $@ $^ $(CXXFLAGS) $(LINKFLAGS)
 	$(STRIP) -x $@
-
-# Linux
-build/linux/x86/flex-ui.so: CXXFLAGS += -m32
 
 # macOS
 build/macos/flex-ui.dylib: CXXFLAGS += -arch x86_64 -arch arm64
@@ -84,7 +81,6 @@ windows-mingw-x86: LINKFLAGS += -static-libgcc -Wl,-Bstatic -lstdc++ -lpthread -
 windows-mingw-x86: build/windows/x86/flex-ui.dll
 
 linux-x86_64: build/linux/x86_64/flex-ui.so
-linux-x86: build/linux/x86/flex-ui.so
 
 macos-universal: build/macos/flex-ui.dylib
 ios-arm64: build/ios/flex-ui.dylib
