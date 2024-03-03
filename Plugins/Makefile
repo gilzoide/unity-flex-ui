@@ -69,27 +69,33 @@ build/webgl/flex-ui.bc: src~/flex-ui.cpp | build/webgl
 # Targets
 windows-x86_64: build/windows/x86_64/flex-ui.dll
 windows-x86: build/windows/x86/flex-ui.dll
+all-windows: windows-x86_64 windows-x86
 
-windows-mingw-x86_64: CXX = x86_64-w64-mingw32-c++
-windows-mingw-x86_64: STRIP = x86_64-w64-mingw32-strip
-windows-mingw-x86_64: LINKFLAGS += -static-libgcc -Wl,-Bstatic -lstdc++ -lpthread -Wl,-Bdynamic
-windows-mingw-x86_64: build/windows/x86_64/flex-ui.dll
+windows-x86_64-mingw: CXX = x86_64-w64-mingw32-c++
+windows-x86_64-mingw: STRIP = x86_64-w64-mingw32-strip
+windows-x86_64-mingw: LINKFLAGS += -static-libgcc -Wl,-Bstatic -lstdc++ -lpthread -Wl,-Bdynamic
+windows-x86_64-mingw: build/windows/x86_64/flex-ui.dll
 
-windows-mingw-x86: CXX = i686-w64-mingw32-c++
-windows-mingw-x86: STRIP = i686-w64-mingw32-strip
-windows-mingw-x86: LINKFLAGS += -static-libgcc -Wl,-Bstatic -lstdc++ -lpthread -Wl,-Bdynamic
-windows-mingw-x86: build/windows/x86/flex-ui.dll
+windows-x86-mingw: CXX = i686-w64-mingw32-c++
+windows-x86-mingw: STRIP = i686-w64-mingw32-strip
+windows-x86-mingw: LINKFLAGS += -static-libgcc -Wl,-Bstatic -lstdc++ -lpthread -Wl,-Bdynamic
+windows-x86-mingw: build/windows/x86/flex-ui.dll
+all-windows-mingw: windows-x86_64-mingw windows-x86-mingw
 
 linux-x86_64: build/linux/x86_64/libflex-ui.so
+all-linux: linux-x86_64
 
 macos-universal: build/macos/libflex-ui.dylib
 ios-arm64: build/ios/libflex-ui.dylib
 tvos-arm64: build/tvos/libflex-ui.dylib
 visionos-arm64: build/visionos/libflex-ui.dylib
+all-apple: macos-universal ios-arm64 tvos-arm64 visionos-arm64
 
 android-arm64: build/android/arm64/libflex-ui.so
 android-arm32: build/android/arm32/libflex-ui.so
 android-x86_64: build/android/x86_64/libflex-ui.so
 android-x86: build/android/x86/libflex-ui.so
+all-android: android-arm64 android-arm32 android-x86_64 android-x86
 
 webgl: build/webgl/flex-ui.bc
+all-webgl: webgl
