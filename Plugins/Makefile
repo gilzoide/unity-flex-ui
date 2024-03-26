@@ -58,7 +58,7 @@ build/android/x86_64/libflex-ui.so: CXX = $(wildcard $(ANDROID_NDK_ROOT)/toolcha
 build/android/x86/libflex-ui.so: CXX = $(wildcard $(ANDROID_NDK_ROOT)/toolchains/llvm/prebuilt/*/bin/i686-linux-android19-clang++)
 
 # WebGL
-build/webgl/flex-ui.bc: src~/flex-ui.cpp | build/webgl
+build/webgl/libflex-ui.bc: src~/flex-ui.cpp | build/webgl
 # Workaround: prepend Yoga symbols with a '_' to avoid build errors,
 # since Unity already exports some of them (used by UI Toolkit).
 # C++ -> LLVM IR -> rename functions in text -> LLVM Bitcode
@@ -97,5 +97,5 @@ android-x86_64: build/android/x86_64/libflex-ui.so
 android-x86: build/android/x86/libflex-ui.so
 all-android: android-arm64 android-arm32 android-x86_64 android-x86
 
-webgl: build/webgl/flex-ui.bc
+webgl: build/webgl/libflex-ui.bc
 all-webgl: webgl
