@@ -36,7 +36,16 @@
 ///////////////////////////////////////////////////////////
 #define EXPORT __attribute__((visibility("default")))
 
+#include <stdexcept>
+#include "IUnityLog.h"
+
+static IUnityLog *logger;
+
 extern "C" {
+
+EXPORT void UnityPluginLoad(IUnityInterfaces* unityInterfaces) {
+	logger = UNITY_GET_INTERFACE(unityInterfaces, IUnityLog);
+}
 
 EXPORT YGConfigRef FlexUi_ConfigNew() {
 	return YGConfigNew();
@@ -74,8 +83,15 @@ EXPORT void FlexUi_NodeCalculateLayout(YGNodeRef node, float availableWidth, flo
 	YGNodeCalculateLayout(node, availableWidth, availableHeight, ownerDirection);
 }
 
-EXPORT void FlexUi_NodeInsertChild(YGNodeRef node, YGNodeRef child, int index) {
-	YGNodeInsertChild(node, child, index);
+EXPORT bool FlexUi_NodeInsertChild(YGNodeRef node, YGNodeRef child, int index) {
+	try {
+		YGNodeInsertChild(node, child, index);
+		return true;
+	}
+	catch (std::logic_error err) {
+		UNITY_LOG_ERROR(logger, err.what());
+		return false;
+	}
 }
 
 EXPORT void FlexUi_NodeRemoveChild(YGNodeRef node, YGNodeRef child) {

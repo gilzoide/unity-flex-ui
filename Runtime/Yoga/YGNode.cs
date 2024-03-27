@@ -261,9 +261,9 @@ namespace Gilzoide.FlexUi.Yoga
             Yoga.YGNodeCalculateLayout(_nodePtr, availableWidth, availableHeight, ownerDirection);
         }
 
-        public void InsertChild(YGNode child, int index)
+        public bool InsertChild(YGNode child, int index)
         {
-            Yoga.YGNodeInsertChild(_nodePtr, child._nodePtr, index);
+            return Yoga.YGNodeInsertChild(_nodePtr, child._nodePtr, index);
         }
         public void RemoveChild(YGNode child)
         {
