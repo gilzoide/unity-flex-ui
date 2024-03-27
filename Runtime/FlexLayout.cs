@@ -57,7 +57,7 @@ namespace Gilzoide.FlexUi
         [SerializeField] private YGValue _paddingBottom = YGValue.Zero;
 
 #if UNITY_EDITOR || !UNITY_2021_2_OR_NEWER
-        [SerializeField, HideInInspector] internal bool[] _foldoutState = { false, false, false, false, false, false };
+        [SerializeField, HideInInspector] internal List<bool> _foldoutState = new List<bool>();
 #endif
 
         public bool IsRootLayoutNode => _parentNode == null;
@@ -73,6 +73,7 @@ namespace Gilzoide.FlexUi
                 return node;
             }
         }
+        public FlexLayout ParentLayoutNode => _parentNode;
 
         public RectTransform RectTransform
         {
@@ -424,7 +425,7 @@ namespace Gilzoide.FlexUi
         }
         private YGNode _layoutNode;
         private FlexLayout _parentNode;
-        private readonly List<FlexLayout> _childrenNodes = new List<FlexLayout>();
+        internal readonly List<FlexLayout> _childrenNodes = new List<FlexLayout>();
         private DrivenRectTransformTracker _drivenRectTransformTracker = new DrivenRectTransformTracker();
         private bool _isRefreshScheduled;
         private RectTransform _rectTransform;

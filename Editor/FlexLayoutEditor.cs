@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Reflection;
 using UnityEditor;
 
@@ -7,7 +8,17 @@ namespace Gilzoide.FlexUi.Editor
     [CustomEditor(typeof(FlexLayout))]
     public class FlexLayoutEditor : UnityEditor.Editor
     {
-        private bool[] FoldoutState => ((FlexLayout) serializedObject.targetObject)._foldoutState;
+        private const int FoldoutCount = 7;
+        private List<bool> FoldoutState => ((FlexLayout) serializedObject.targetObject)._foldoutState;
+
+        void OnEnable()
+        {
+            var flexLayout = (FlexLayout) serializedObject.targetObject;
+            while (flexLayout._foldoutState.Count < FoldoutCount)
+            {
+                flexLayout._foldoutState.Add(false);
+            }
+        }
 
         public override void OnInspectorGUI()
         {
@@ -45,7 +56,38 @@ namespace Gilzoide.FlexUi.Editor
                     EditorGUILayout.PropertyField(property, true);
                 }
             }
-            EditorGUI.indentLevel++;
+            EditorGUI.indentLevel--;
+
+            if (!serializedObject.isEditingMultipleObjects)
+            {
+                FlexLayout flexLayout = (FlexLayout) target;
+                EditorGUILayout.Space();
+                EditorGUILayout.LabelField("Debug", EditorStyles.boldLabel);
+                using (new EditorGUI.DisabledScope(true))
+                {
+                    EditorGUILayout.ObjectField("Root Layout", flexLayout.RootLayoutNode, typeof(FlexLayout), true);
+                    EditorGUILayout.ObjectField("Parent Layout", flexLayout.ParentLayoutNode, typeof(FlexLayout), true);
+                    List<FlexLayout> children = flexLayout._childrenNodes;
+                    if (children?.Count > 0)
+                    {
+                        foldoutIndex++;
+                        bool foldout = GetFoldoutState(foldoutIndex);
+                        foldout = EditorGUILayout.Foldout(foldout, "Children", true);
+                        SetFoldoutState(foldoutIndex, foldout);
+                        if (foldout)
+                        {
+                            EditorGUI.indentLevel++;
+                            int i = 0;
+                            foreach (FlexLayout child in flexLayout._childrenNodes)
+                            {
+                                EditorGUILayout.ObjectField(i.ToString(), child, typeof(FlexLayout), true);
+                                i++;
+                            }
+                            EditorGUI.indentLevel--;
+                        }
+                    }
+                }
+            }
 
             serializedObject.ApplyModifiedProperties();
         }
