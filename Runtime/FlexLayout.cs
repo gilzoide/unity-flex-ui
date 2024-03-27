@@ -630,12 +630,8 @@ namespace Gilzoide.FlexUi
         protected void UntrackChild(FlexLayout child, bool refreshDrivenRectTransformTracker = true)
         {
             child._parentNode = null;
-            int index = _childrenNodes.BinarySearch(child, this);
-            if (index >= 0)
-            {
-                LayoutNode.RemoveChild(_childrenNodes[index].LayoutNode);
-                _childrenNodes.RemoveAt(index);
-            }
+            LayoutNode.RemoveChild(child.LayoutNode);
+            _childrenNodes.Remove(child);
             if (refreshDrivenRectTransformTracker)
             {
                 RefreshDrivenRectTransformTracker();
