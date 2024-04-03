@@ -1,7 +1,6 @@
 STRIP ?= strip
 EMCXX ?= em++
 SED ?= sed
-
 ANDROID_NDK_ROOT ?=
 
 LINKFLAGS += -shared
@@ -24,16 +23,16 @@ $(BUILD_DIRS):
 	mkdir -p $@
 
 %/flex-ui.dll: src~/flex-ui.cpp | %
-	$(CXX) -o $@ $^ $(CXXFLAGS) $(LINKFLAGS)
+	$(CXX) -o $@ $< $(CXXFLAGS) $(LINKFLAGS)
 	$(STRIP) -x $@
 
 %/libflex-ui.so: CXXFLAGS += -fPIC
 %/libflex-ui.so: src~/flex-ui.cpp | %
-	$(CXX) -o $@ $^ $(CXXFLAGS) $(LINKFLAGS)
+	$(CXX) -o $@ $< $(CXXFLAGS) $(LINKFLAGS)
 	$(STRIP) -x $@
 
 %/libflex-ui.dylib: src~/flex-ui.cpp | %
-	$(CXX) -o $@ $^ $(CXXFLAGS) $(LINKFLAGS)
+	$(CXX) -o $@ $< $(CXXFLAGS) $(LINKFLAGS)
 	$(STRIP) -x $@
 
 # macOS
@@ -49,13 +48,22 @@ build/tvos/libflex-ui.dylib: CXXFLAGS += -arch arm64 -isysroot $(shell xcrun --s
 build/visionos/libflex-ui.dylib: CXXFLAGS += -arch arm64 -isysroot $(shell xcrun --show-sdk-path --sdk xros)
 
 # Android
+check-ndk-root:
+ifndef ANDROID_NDK_ROOT
+	$(error ANDROID_NDK_ROOT must be set for Android builds!)
+endif
+
 build/android/%/libflex-ui.so: CXXFLAGS += -static-libstdc++
 build/android/%/libflex-ui.so: STRIP = $(wildcard $(ANDROID_NDK_ROOT)/toolchains/llvm/prebuilt/*/bin/llvm-strip)
 
 build/android/arm64/libflex-ui.so: CXX = $(wildcard $(ANDROID_NDK_ROOT)/toolchains/llvm/prebuilt/*/bin/aarch64-linux-android21-clang++)
+build/android/arm64/libflex-ui.so: check-ndk-root
 build/android/arm32/libflex-ui.so: CXX = $(wildcard $(ANDROID_NDK_ROOT)/toolchains/llvm/prebuilt/*/bin/armv7a-linux-androideabi19-clang++)
+build/android/arm32/libflex-ui.so: check-ndk-root
 build/android/x86_64/libflex-ui.so: CXX = $(wildcard $(ANDROID_NDK_ROOT)/toolchains/llvm/prebuilt/*/bin/x86_64-linux-android21-clang++)
+build/android/x86_64/libflex-ui.so: check-ndk-root
 build/android/x86/libflex-ui.so: CXX = $(wildcard $(ANDROID_NDK_ROOT)/toolchains/llvm/prebuilt/*/bin/i686-linux-android19-clang++)
+build/android/x86/libflex-ui.so: check-ndk-root
 
 # WebGL
 build/webgl/libflex-ui.bc: src~/flex-ui.cpp | build/webgl
