@@ -118,3 +118,6 @@ docker-all-android:
 docker-all-windows:
 	docker build -f src~/Dockerfile.build.windows -t gilzoide-flex-ui-build-windows:latest src~
 	docker run --rm -v "$(CURDIR)":/src -w /src gilzoide-flex-ui-build-windows:latest make all-windows-mingw
+docker-all-webgl:
+	docker build -f src~/Dockerfile.build.webgl -t gilzoide-flex-ui-build-webgl:latest src~
+	docker run --rm -v "$(CURDIR)":/src -w /src gilzoide-flex-ui-build-webgl:latest make all-webgl
