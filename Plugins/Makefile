@@ -107,3 +107,8 @@ all-android: android-arm64 android-arm32 android-x86_64 android-x86
 
 webgl: build/webgl/libflex-ui.bc
 all-webgl: webgl
+
+# Dockerized builds
+docker-all-linux:
+	docker build -f src~/Dockerfile.build.linux -t gilzoide-flex-ui-build-linux:latest .
+	docker run --rm -v "$(CURDIR)":/src -w /src --platform=linux/amd64 gilzoide-flex-ui-build-linux:latest make all-linux
