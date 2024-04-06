@@ -112,3 +112,6 @@ all-webgl: webgl
 docker-all-linux:
 	docker build -f src~/Dockerfile.build.linux -t gilzoide-flex-ui-build-linux:latest .
 	docker run --rm -v "$(CURDIR)":/src -w /src --platform=linux/amd64 gilzoide-flex-ui-build-linux:latest make all-linux
+docker-all-windows:
+	docker build -f src~/Dockerfile.build.windows -t gilzoide-flex-ui-build-windows:latest src~
+	docker run --rm -v "$(CURDIR)":/src -w /src gilzoide-flex-ui-build-windows:latest make all-windows-mingw
