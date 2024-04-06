@@ -263,7 +263,16 @@ namespace Gilzoide.FlexUi.Yoga
 
         public bool InsertChild(YGNode child, int index)
         {
-            return Yoga.YGNodeInsertChild(_nodePtr, child._nodePtr, index);
+            string error = Yoga.YGNodeInsertChild(_nodePtr, child._nodePtr, index);
+            if (error != null)
+            {
+                Debug.LogError(error);
+                return false;
+            }
+            else
+            {
+                return true;
+            }
         }
         public void RemoveChild(YGNode child)
         {
@@ -276,7 +285,11 @@ namespace Gilzoide.FlexUi.Yoga
 
         public void SetConfig(YGConfig config)
         {
-            Yoga.YGNodeSetConfig(_nodePtr, config._configPtr);
+            string error = Yoga.YGNodeSetConfig(_nodePtr, config._configPtr);
+            if (error != null)
+            {
+                Debug.LogError(error);
+            }
         }
 
         #endregion

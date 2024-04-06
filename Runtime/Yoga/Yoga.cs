@@ -30,11 +30,11 @@ namespace Gilzoide.FlexUi.Yoga
 
         [DllImport(YogaDll, EntryPoint = "FlexUi_NodeCalculateLayout")] public static extern void YGNodeCalculateLayout(IntPtr node, float availableWidth, float availableHeight, Direction ownerDirection);
 
-        [DllImport(YogaDll, EntryPoint = "FlexUi_NodeInsertChild")] public static extern bool YGNodeInsertChild(IntPtr node, IntPtr child, int index);
+        [DllImport(YogaDll, EntryPoint = "FlexUi_NodeInsertChild")] public static extern string YGNodeInsertChild(IntPtr node, IntPtr child, int index);
         [DllImport(YogaDll, EntryPoint = "FlexUi_NodeRemoveChild")] public static extern void YGNodeRemoveChild(IntPtr node, IntPtr child);
         [DllImport(YogaDll, EntryPoint = "FlexUi_NodeRemoveAllChildren")] public static extern void YGNodeRemoveAllChildren(IntPtr node);
 
-        [DllImport(YogaDll, EntryPoint = "FlexUi_NodeSetConfig")] public static extern void YGNodeSetConfig(IntPtr node, IntPtr config);
+        [DllImport(YogaDll, EntryPoint = "FlexUi_NodeSetConfig")] public static extern string YGNodeSetConfig(IntPtr node, IntPtr config);
 
         #endregion
 
