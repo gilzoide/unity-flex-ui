@@ -483,7 +483,7 @@ namespace Gilzoide.FlexUi
             try
             {
                 await Task.Yield();
-                if (root)
+                if (root && root.IsActive() && root.IsRootLayoutNode)
                 {
                     root.RefreshLayout();
                 }
