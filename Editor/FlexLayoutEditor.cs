@@ -8,18 +8,6 @@ namespace Gilzoide.FlexUi.Editor
     [CustomEditor(typeof(FlexLayout))]
     public class FlexLayoutEditor : UnityEditor.Editor
     {
-        private const int FoldoutCount = 7;
-        private List<bool> FoldoutState => ((FlexLayout) serializedObject.targetObject)._foldoutState;
-
-        void OnEnable()
-        {
-            var flexLayout = (FlexLayout) serializedObject.targetObject;
-            while (flexLayout._foldoutState.Count < FoldoutCount)
-            {
-                flexLayout._foldoutState.Add(false);
-            }
-        }
-
         public override void OnInspectorGUI()
         {
             serializedObject.Update();
@@ -51,7 +39,7 @@ namespace Gilzoide.FlexUi.Editor
                     EditorGUI.indentLevel++;
                 }
 
-                if (FoldoutState[foldoutIndex])
+                if (GetFoldoutState(foldoutIndex))
                 {
                     EditorGUILayout.PropertyField(property, true);
                 }
@@ -95,12 +83,20 @@ namespace Gilzoide.FlexUi.Editor
         private void SetFoldoutState(int index, bool value)
         {
             SerializedProperty foldoutProperty = serializedObject.FindProperty(nameof(FlexLayout._foldoutState));
+            while (foldoutProperty.arraySize < index + 1)
+            {
+                foldoutProperty.InsertArrayElementAtIndex(foldoutProperty.arraySize);
+            }
             foldoutProperty.GetArrayElementAtIndex(index).boolValue = value;
         }
 
         private bool GetFoldoutState(int index)
         {
             SerializedProperty foldoutProperty = serializedObject.FindProperty(nameof(FlexLayout._foldoutState));
+            while (foldoutProperty.arraySize < index + 1)
+            {
+                foldoutProperty.InsertArrayElementAtIndex(foldoutProperty.arraySize);
+            }
             return foldoutProperty.GetArrayElementAtIndex(index).boolValue;
         }
     }
