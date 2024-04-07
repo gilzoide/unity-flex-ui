@@ -33,6 +33,7 @@ $(BUILD_DIRS):
 
 %/libflex-ui.dylib: src~/flex-ui.cpp | %
 	$(CXX) -o $@ $< $(CXXFLAGS) $(LINKFLAGS)
+	install_name_tool -id @rpath/$(@F) $@
 	$(STRIP) -x $@
 
 # macOS
