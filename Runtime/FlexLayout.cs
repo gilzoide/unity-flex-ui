@@ -56,6 +56,10 @@ namespace Gilzoide.FlexUi
         [SerializeField] private YGValue _paddingRight = YGValue.Zero;
         [SerializeField] private YGValue _paddingBottom = YGValue.Zero;
 
+        [FoldoutHeader("Gap")]
+        [SerializeField, Min(0)] private float _gapColumn = 0;
+        [SerializeField, Min(0)] private float _gapRow = 0;
+
 #if UNITY_EDITOR || !UNITY_2021_2_OR_NEWER
         [SerializeField, HideInInspector] internal List<bool> _foldoutState = new List<bool>();
 #endif
@@ -408,6 +412,27 @@ namespace Gilzoide.FlexUi
             }
         }
 
+        public float GapColumn
+        {
+            get => _gapColumn;
+            set
+            {
+                _gapColumn = value;
+                LayoutNode.StyleSetGap(Gutter.Column, value);
+                RefreshRootLayout();
+            }
+        }
+        public float GapRow
+        {
+            get => _gapRow;
+            set
+            {
+                _gapRow = value;
+                LayoutNode.StyleSetGap(Gutter.Row, value);
+                RefreshRootLayout();
+            }
+        }
+
         #endregion
 
         protected YGNode LayoutNode
@@ -572,6 +597,9 @@ namespace Gilzoide.FlexUi
             layoutNode.StyleSetPadding(Edge.Top, _paddingTop);
             layoutNode.StyleSetPadding(Edge.Right, _paddingRight);
             layoutNode.StyleSetPadding(Edge.Bottom, _paddingBottom);
+            // gap
+            layoutNode.StyleSetGap(Gutter.Column, _gapColumn);
+            layoutNode.StyleSetGap(Gutter.Row, _gapRow);
         }
 
         protected void RefreshParent()

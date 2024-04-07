@@ -201,6 +201,10 @@ EXPORT void FlexUi_NodeStyleSetPaddingPercent(YGNodeRef node, YGEdge edge, float
 	YGNodeStyleSetPaddingPercent(node, edge, padding);
 }
 
+EXPORT void FlexUi_NodeStyleSetGap(YGNodeRef node, YGGutter gutter, float padding) {
+	YGNodeStyleSetGap(node, gutter, padding);
+}
+
 EXPORT void FlexUi_NodeStyleSetWidth(YGNodeRef node, float width) {
 	YGNodeStyleSetWidth(node, width);
 }
