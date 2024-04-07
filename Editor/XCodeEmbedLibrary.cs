@@ -1,5 +1,6 @@
 #if UNITY_STANDALONE_OSX || UNITY_IOS || UNITY_TVOS || UNITY_VISIONOS
 using System.IO;
+using System.Linq;
 using UnityEditor;
 using UnityEditor.Callbacks;
 using UnityEditor.iOS.Xcode;
@@ -10,14 +11,17 @@ namespace Gilzoide.FlexUi.Editor
     public static class XCodeEmbedLibrary
     {
 #if UNITY_STANDALONE_OSX
-        const string PackageLibraryPath = "Packages/com.gilzoide.flex-ui/Plugins/build/macos/libflex-ui.dylib";
+        const string PlatformFolderName = "macos";
 #elif UNITY_IOS
-        const string PackageLibraryPath = "Packages/com.gilzoide.flex-ui/Plugins/build/ios/libflex-ui.dylib";
+        const string PlatformFolderName = "ios";
 #elif UNITY_TVOS
-        const string PackageLibraryPath = "Packages/com.gilzoide.flex-ui/Plugins/build/tvos/libflex-ui.dylib";
+        const string PlatformFolderName = "tvos";
 #elif UNITY_VISIONOS
-        const string PackageLibraryPath = "Packages/com.gilzoide.flex-ui/Plugins/build/visionos/libflex-ui.dylib";
+        const string PlatformFolderName = "visionos";
 #endif
+        static string PackageLibraryPath => AssetDatabase.FindAssets($"glob:{PlatformFolderName}/libflex-ui.dylib")
+            .Select(AssetDatabase.GUIDToAssetPath)
+            .First();
         const string XCodeLibraryPath = "Libraries/libflex-ui.dylib";
 
         [PostProcessBuild]
@@ -35,10 +39,11 @@ namespace Gilzoide.FlexUi.Editor
                 return;
             }
 
+            FileUtil.CopyFileOrDirectory(PackageLibraryPath, fullLibraryPath);
+
             var pbxProject = new PBXProject();
             pbxProject.ReadFromFile(pbxProjectPath);
 
-            FileUtil.CopyFileOrDirectory(PackageLibraryPath, fullLibraryPath);
             string libGuid = pbxProject.AddFile(XCodeLibraryPath, XCodeLibraryPath, PBXSourceTree.Source);
             pbxProject.AddFileToEmbedFrameworks(pbxProject.GetUnityMainTargetGuid(), libGuid);
 
