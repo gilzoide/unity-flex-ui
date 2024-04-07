@@ -402,6 +402,11 @@ namespace Gilzoide.FlexUi.Yoga
             Yoga.YGNodeStyleSetPaddingPercent(_nodePtr, edge, padding);
         }
 
+        public void StyleSetGap(Gutter gutter, float value)
+        {
+            Yoga.YGNodeStyleSetGap(_nodePtr, gutter, value);
+        }
+
         public void StyleSetWidth(float width)
         {
             Yoga.YGNodeStyleSetWidth(_nodePtr, width);

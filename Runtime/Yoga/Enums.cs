@@ -80,6 +80,13 @@ namespace Gilzoide.FlexUi.Yoga
         RowReverse,
     }
 
+    public enum Gutter
+    {
+        Column,
+        Row,
+        All,
+    }
+
     public enum Justify
     {
         FlexStart,

@@ -74,6 +74,8 @@ namespace Gilzoide.FlexUi.Yoga
         [DllImport(YogaDll, EntryPoint = "FlexUi_NodeStyleSetPadding")] public static extern void YGNodeStyleSetPadding(IntPtr node, Edge edge, float padding);
         [DllImport(YogaDll, EntryPoint = "FlexUi_NodeStyleSetPaddingPercent")] public static extern void YGNodeStyleSetPaddingPercent(IntPtr node, Edge edge, float padding);
 
+        [DllImport(YogaDll, EntryPoint = "FlexUi_NodeStyleSetGap")] public static extern void YGNodeStyleSetGap(IntPtr node, Gutter gutter, float gapLength);
+
         [DllImport(YogaDll, EntryPoint = "FlexUi_NodeStyleSetWidth")] public static extern void YGNodeStyleSetWidth(IntPtr node, float width);
         [DllImport(YogaDll, EntryPoint = "FlexUi_NodeStyleSetWidthPercent")] public static extern void YGNodeStyleSetWidthPercent(IntPtr node, float width);
         [DllImport(YogaDll, EntryPoint = "FlexUi_NodeStyleSetWidthAuto")] public static extern void YGNodeStyleSetWidthAuto(IntPtr node);
