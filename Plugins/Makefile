@@ -58,11 +58,11 @@ build/android/%/libflex-ui.so: STRIP = $(wildcard $(ANDROID_NDK_ROOT)/toolchains
 
 build/android/arm64/libflex-ui.so: CXX = $(wildcard $(ANDROID_NDK_ROOT)/toolchains/llvm/prebuilt/*/bin/aarch64-linux-android21-clang++)
 build/android/arm64/libflex-ui.so: check-ndk-root
-build/android/arm32/libflex-ui.so: CXX = $(wildcard $(ANDROID_NDK_ROOT)/toolchains/llvm/prebuilt/*/bin/armv7a-linux-androideabi19-clang++)
+build/android/arm32/libflex-ui.so: CXX = $(wildcard $(ANDROID_NDK_ROOT)/toolchains/llvm/prebuilt/*/bin/armv7a-linux-androideabi21-clang++)
 build/android/arm32/libflex-ui.so: check-ndk-root
 build/android/x86_64/libflex-ui.so: CXX = $(wildcard $(ANDROID_NDK_ROOT)/toolchains/llvm/prebuilt/*/bin/x86_64-linux-android21-clang++)
 build/android/x86_64/libflex-ui.so: check-ndk-root
-build/android/x86/libflex-ui.so: CXX = $(wildcard $(ANDROID_NDK_ROOT)/toolchains/llvm/prebuilt/*/bin/i686-linux-android19-clang++)
+build/android/x86/libflex-ui.so: CXX = $(wildcard $(ANDROID_NDK_ROOT)/toolchains/llvm/prebuilt/*/bin/i686-linux-android21-clang++)
 build/android/x86/libflex-ui.so: check-ndk-root
 
 # WebGL
@@ -107,3 +107,17 @@ all-android: android-arm64 android-arm32 android-x86_64 android-x86
 
 webgl: build/webgl/libflex-ui.bc
 all-webgl: webgl
+
+# Dockerized builds
+docker-all-linux:
+	docker build -f src~/Dockerfile.build.linux -t gilzoide-flex-ui-build-linux:latest src~
+	docker run --rm -v "$(CURDIR)":/src -w /src --platform=linux/amd64 gilzoide-flex-ui-build-linux:latest make all-linux
+docker-all-android:
+	docker build -f src~/Dockerfile.build.android -t gilzoide-flex-ui-build-android:latest src~
+	docker run --rm -v "$(CURDIR)":/src -w /src --platform=linux/amd64 gilzoide-flex-ui-build-android:latest make all-android
+docker-all-windows:
+	docker build -f src~/Dockerfile.build.windows -t gilzoide-flex-ui-build-windows:latest src~
+	docker run --rm -v "$(CURDIR)":/src -w /src gilzoide-flex-ui-build-windows:latest make all-windows-mingw
+docker-all-webgl:
+	docker build -f src~/Dockerfile.build.webgl -t gilzoide-flex-ui-build-webgl:latest src~
+	docker run --rm -v "$(CURDIR)":/src -w /src gilzoide-flex-ui-build-webgl:latest make all-webgl
