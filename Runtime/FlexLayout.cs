@@ -632,7 +632,7 @@ namespace Gilzoide.FlexUi
         {
             foreach (Transform child in RectTransform)
             {
-                if (child.TryGetComponent(out FlexLayout childLayout))
+                if (child.TryGetComponent(out FlexLayout childLayout) && childLayout.IsActive())
                 {
                     TrackChild(childLayout, false);
                 }
