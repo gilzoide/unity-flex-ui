@@ -519,6 +519,7 @@ namespace Gilzoide.FlexUi
             }
         }
 
+        [ContextMenu("Refresh Layout")]
         public void RefreshRootLayoutImmediate()
         {
             RootLayoutNode.RefreshLayout();
@@ -637,12 +638,11 @@ namespace Gilzoide.FlexUi
                     TrackChild(childLayout, false);
                 }
             }
-            RefreshDrivenRectTransformTracker();
+            OnChildrenChanged();
         }
 
-        protected void TrackChild(FlexLayout child, bool refreshDrivenRectTransformTracker = true)
+        protected void TrackChild(FlexLayout child, bool callChildrenChanged = true)
         {
-            RefreshRootLayout();
             child._parentNode = this;
             int binaryIndex = _childrenNodes.BinarySearch(child, this);
             if (binaryIndex < 0)
@@ -651,21 +651,20 @@ namespace Gilzoide.FlexUi
                 _childrenNodes.Insert(childIndex, child);
                 LayoutNode.InsertChild(child.LayoutNode, childIndex);
             }
-            if (refreshDrivenRectTransformTracker)
+            if (callChildrenChanged)
             {
-                RefreshDrivenRectTransformTracker();
+                OnChildrenChanged();
             }
         }
 
-        protected void UntrackChild(FlexLayout child, bool refreshDrivenRectTransformTracker = true)
+        protected void UntrackChild(FlexLayout child, bool callChildrenChanged = true)
         {
-            RefreshRootLayout();
             child._parentNode = null;
             LayoutNode.RemoveChild(child.LayoutNode);
             _childrenNodes.Remove(child);
-            if (refreshDrivenRectTransformTracker)
+            if (callChildrenChanged)
             {
-                RefreshDrivenRectTransformTracker();
+                OnChildrenChanged();
             }
         }
 
@@ -676,6 +675,12 @@ namespace Gilzoide.FlexUi
             {
                 _drivenRectTransformTracker.Add(this, child.RectTransform, DrivenRectTransformProperties);
             }
+        }
+
+        protected void OnChildrenChanged()
+        {
+            RefreshDrivenRectTransformTracker();
+            RefreshRootLayout();
         }
 
         protected void ClearTrackedChildren()
