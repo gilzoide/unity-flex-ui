@@ -606,7 +606,7 @@ namespace Gilzoide.FlexUi
         protected void RefreshParent()
         {
             Transform parent = RectTransform.parent;
-            if (parent && parent.TryGetComponent(out FlexLayout parentNode))
+            if (parent && parent.TryGetComponent(out FlexLayout parentNode) && parentNode.IsActive())
             {
                 if (parentNode != _parentNode)
                 {
