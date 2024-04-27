@@ -519,6 +519,7 @@ namespace Gilzoide.FlexUi
             }
         }
 
+        [ContextMenu("Refresh Layout")]
         public void RefreshRootLayoutImmediate()
         {
             RootLayoutNode.RefreshLayout();
@@ -605,7 +606,7 @@ namespace Gilzoide.FlexUi
         protected void RefreshParent()
         {
             Transform parent = RectTransform.parent;
-            if (parent && parent.TryGetComponent(out FlexLayout parentNode))
+            if (parent && parent.TryGetComponent(out FlexLayout parentNode) && parentNode.IsActive())
             {
                 if (parentNode != _parentNode)
                 {
@@ -632,15 +633,15 @@ namespace Gilzoide.FlexUi
         {
             foreach (Transform child in RectTransform)
             {
-                if (child.TryGetComponent(out FlexLayout childLayout))
+                if (child.TryGetComponent(out FlexLayout childLayout) && childLayout.IsActive())
                 {
                     TrackChild(childLayout, false);
                 }
             }
-            RefreshDrivenRectTransformTracker();
+            OnChildrenChanged();
         }
 
-        protected void TrackChild(FlexLayout child, bool refreshDrivenRectTransformTracker = true)
+        protected void TrackChild(FlexLayout child, bool callChildrenChanged = true)
         {
             child._parentNode = this;
             int binaryIndex = _childrenNodes.BinarySearch(child, this);
@@ -650,20 +651,20 @@ namespace Gilzoide.FlexUi
                 _childrenNodes.Insert(childIndex, child);
                 LayoutNode.InsertChild(child.LayoutNode, childIndex);
             }
-            if (refreshDrivenRectTransformTracker)
+            if (callChildrenChanged)
             {
-                RefreshDrivenRectTransformTracker();
+                OnChildrenChanged();
             }
         }
 
-        protected void UntrackChild(FlexLayout child, bool refreshDrivenRectTransformTracker = true)
+        protected void UntrackChild(FlexLayout child, bool callChildrenChanged = true)
         {
             child._parentNode = null;
             LayoutNode.RemoveChild(child.LayoutNode);
             _childrenNodes.Remove(child);
-            if (refreshDrivenRectTransformTracker)
+            if (callChildrenChanged)
             {
-                RefreshDrivenRectTransformTracker();
+                OnChildrenChanged();
             }
         }
 
@@ -674,6 +675,12 @@ namespace Gilzoide.FlexUi
             {
                 _drivenRectTransformTracker.Add(this, child.RectTransform, DrivenRectTransformProperties);
             }
+        }
+
+        protected void OnChildrenChanged()
+        {
+            RefreshDrivenRectTransformTracker();
+            RefreshRootLayout();
         }
 
         protected void ClearTrackedChildren()
