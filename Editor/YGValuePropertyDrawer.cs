@@ -12,6 +12,7 @@ namespace Gilzoide.FlexUi.Editor
             SerializedProperty unitProperty = property.FindPropertyRelative(nameof(YGValue.Unit));
             SerializedProperty valueProperty = property.FindPropertyRelative(nameof(YGValue.Value));
             property.NextVisible(true);
+            position.width *= 1.32f;
             EditorGUI.MultiPropertyField(position, new[]{ new GUIContent(" "), GUIContent.none }, property, label);
             switch ((Unit) unitProperty.enumValueIndex)
             {
@@ -25,7 +26,10 @@ namespace Gilzoide.FlexUi.Editor
 
                 case Unit.Undefined:
                 case Unit.Auto:
-                    valueProperty.floatValue = float.NaN;
+                    if (!float.IsNaN(valueProperty.floatValue))
+                    {
+                        valueProperty.floatValue = float.NaN;
+                    }
                     break;
             }
         }
