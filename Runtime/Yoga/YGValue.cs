@@ -10,7 +10,7 @@ namespace Gilzoide.FlexUi.Yoga
     [StructLayout(LayoutKind.Sequential)]
     public struct YGValue
     {
-        public float Value;
+        [NaNIsDisabled] public float Value;
         public Unit Unit;
 
         public YGValue(float value, Unit unit)

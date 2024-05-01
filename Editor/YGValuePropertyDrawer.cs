@@ -1,4 +1,4 @@
-using System;
+using System.Reflection;
 using Gilzoide.FlexUi.Yoga;
 using UnityEditor;
 using UnityEngine;
@@ -10,77 +10,36 @@ namespace Gilzoide.FlexUi.Editor
     {
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
-            string value = GetValueAsString(property);
-            string newValue = EditorGUI.DelayedTextField(position, label, value).ToLowerInvariant().Trim();
-            if (newValue == "auto")
+            UnitPropertyDrawer.NoAuto = fieldInfo.GetCustomAttribute<NoAutoAttribute>() != null;
+            SerializedProperty unitProperty = property.FindPropertyRelative(nameof(YGValue.Unit));
+            SerializedProperty valueProperty = property.FindPropertyRelative(nameof(YGValue.Value));
+            property.NextVisible(true);
+            position.width *= 1.32f;
+            EditorGUI.MultiPropertyField(position, new[]{ new GUIContent(" "), GUIContent.none }, property, label);
+            UnitPropertyDrawer.NoAuto = false;
+            switch ((Unit) unitProperty.enumValueIndex)
             {
-                SetValue(property, YGValue.Auto);
-            }
-            else if (newValue == "" || newValue == "none" || newValue == "undefined")
-            {
-                SetValue(property, YGValue.Undefined);
-            }
-            else if (newValue.EndsWith('%') && ExpressionEvaluator.Evaluate(newValue.TrimEnd('%'), out float percentValue))
-            {
-                SetValue(property, new YGValue(percentValue, Unit.Percent));
-            }
-            else if (ExpressionEvaluator.Evaluate(newValue, out float pointValue))
-            {
-                SetValue(property, new YGValue(pointValue, Unit.Point));
+                case Unit.Point:
+                case Unit.Percent:
+                    if (float.IsNaN(valueProperty.floatValue))
+                    {
+                        valueProperty.floatValue = 100;
+                    }
+                    break;
+
+                case Unit.Undefined:
+                case Unit.Auto:
+                    if (!float.IsNaN(valueProperty.floatValue))
+                    {
+                        valueProperty.floatValue = float.NaN;
+                    }
+                    break;
             }
         }
 
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
             return EditorGUI.GetPropertyHeight(SerializedPropertyType.String, label);
-        }
-
-        private static string GetValueAsString(SerializedProperty property)
-        {
-            if (property.hasMultipleDifferentValues)
-            {
-                return "—";
-            }
-
-            int unit = property.FindPropertyRelative(nameof(YGValue.Unit)).enumValueIndex;
-            float value = property.FindPropertyRelative(nameof(YGValue.Value)).floatValue;
-            switch ((Unit) unit)
-            {
-                case Unit.Undefined:
-                    return "none";
-
-                case Unit.Point:
-                    if (float.IsNaN(value))
-                    {
-                        return "none";
-                    }
-                    else
-                    {
-                        return value.ToString();
-                    }
-
-                case Unit.Percent:
-                    if (float.IsNaN(value))
-                    {
-                        return "none";
-                    }
-                    else
-                    {
-                        return value.ToString() + '%';
-                    }
-
-                case Unit.Auto:
-                    return "auto";
-
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(YGValue.Unit));
-            }
-        }
-
-        private void SetValue(SerializedProperty property, YGValue value)
-        {
-            property.FindPropertyRelative(nameof(YGValue.Value)).floatValue = value.Value;
-            property.FindPropertyRelative(nameof(YGValue.Unit)).enumValueIndex = (int) value.Unit;
         }
     }
 }

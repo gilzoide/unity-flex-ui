@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 using UnityEditor;
+using UnityEngine;
 
 namespace Gilzoide.FlexUi.Editor
 {
@@ -77,7 +78,13 @@ namespace Gilzoide.FlexUi.Editor
                 }
             }
 
-            serializedObject.ApplyModifiedProperties();
+            if (serializedObject.ApplyModifiedProperties())
+            {
+                foreach (Object obj in targets)
+                {
+                    ((FlexLayout) obj).RefreshRootLayoutImmediate();
+                }
+            }
         }
 
         private void SetFoldoutState(int index, bool value)

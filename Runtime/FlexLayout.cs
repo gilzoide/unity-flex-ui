@@ -16,10 +16,10 @@ namespace Gilzoide.FlexUi
 
         [FoldoutHeader("Position")]
         [SerializeField] private PositionType _positionType = PositionType.Relative;
-        [SerializeField] private YGValue _positionLeft = YGValue.Undefined;
-        [SerializeField] private YGValue _positionTop = YGValue.Undefined;
-        [SerializeField] private YGValue _positionRight = YGValue.Undefined;
-        [SerializeField] private YGValue _positionBottom = YGValue.Undefined;
+        [SerializeField, NoAuto] private YGValue _positionLeft = YGValue.Undefined;
+        [SerializeField, NoAuto] private YGValue _positionTop = YGValue.Undefined;
+        [SerializeField, NoAuto] private YGValue _positionRight = YGValue.Undefined;
+        [SerializeField, NoAuto] private YGValue _positionBottom = YGValue.Undefined;
 
         [FoldoutHeader("Flex")]
         [SerializeField] private Direction _direction = Direction.Inherit;
@@ -38,10 +38,10 @@ namespace Gilzoide.FlexUi
         [FoldoutHeader("Size")]
         [SerializeField] private YGValue _width = YGValue.Auto;
         [SerializeField] private YGValue _height = YGValue.Auto;
-        [SerializeField] private YGValue _minWidth = YGValue.Undefined;
-        [SerializeField] private YGValue _minHeight = YGValue.Undefined;
-        [SerializeField] private YGValue _maxWidth = YGValue.Undefined;
-        [SerializeField] private YGValue _maxHeight = YGValue.Undefined;
+        [SerializeField, NoAuto] private YGValue _minWidth = YGValue.Undefined;
+        [SerializeField, NoAuto] private YGValue _minHeight = YGValue.Undefined;
+        [SerializeField, NoAuto] private YGValue _maxWidth = YGValue.Undefined;
+        [SerializeField, NoAuto] private YGValue _maxHeight = YGValue.Undefined;
         [SerializeField] private YGValue _aspectRatio = YGValue.Undefined;
 
         [FoldoutHeader("Margin")]
@@ -51,10 +51,10 @@ namespace Gilzoide.FlexUi
         [SerializeField] private YGValue _marginBottom = YGValue.Zero;
 
         [FoldoutHeader("Padding")]
-        [SerializeField] private YGValue _paddingLeft = YGValue.Zero;
-        [SerializeField] private YGValue _paddingTop = YGValue.Zero;
-        [SerializeField] private YGValue _paddingRight = YGValue.Zero;
-        [SerializeField] private YGValue _paddingBottom = YGValue.Zero;
+        [SerializeField, NoAuto] private YGValue _paddingLeft = YGValue.Zero;
+        [SerializeField, NoAuto] private YGValue _paddingTop = YGValue.Zero;
+        [SerializeField, NoAuto] private YGValue _paddingRight = YGValue.Zero;
+        [SerializeField, NoAuto] private YGValue _paddingBottom = YGValue.Zero;
 
         [FoldoutHeader("Gap")]
         [SerializeField, Min(0)] private float _gapColumn = 0;
