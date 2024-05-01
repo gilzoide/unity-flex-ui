@@ -9,8 +9,8 @@ namespace Gilzoide.FlexUi.Editor
     {
         internal static bool NoAuto { get; set;}
 
-        static readonly string[] _labels = { "none", "px", "%", "auto" };
-        static readonly string[] _noAutoLabels = { "none", "px", "%" };
+        static readonly string[] _labels = { "initial", "px", "%", "auto" };
+        static readonly string[] _noAutoLabels = { "initial", "px", "%" };
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
