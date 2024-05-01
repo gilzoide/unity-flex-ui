@@ -7,5 +7,12 @@
   "license": "Unlicense",
   "author": {
     "name": "Gil Barbosa Reis"
-  }
+  },
+  "samples": [
+    {
+      "displayName": "Scroll View",
+      "description": "Example of Flex layout used in Scroll View contents.",
+      "path": "Samples~/ScrollView"
+    }
+  ]
 }
