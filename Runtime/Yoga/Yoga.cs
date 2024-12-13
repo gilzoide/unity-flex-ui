@@ -1,5 +1,6 @@
 using System;
 using System.Runtime.InteropServices;
+using UnityEngine;
 
 namespace Gilzoide.FlexUi.Yoga
 {
@@ -33,8 +34,21 @@ namespace Gilzoide.FlexUi.Yoga
         [DllImport(YogaDll, EntryPoint = "FlexUi_NodeInsertChild")] public static extern string YGNodeInsertChild(IntPtr node, IntPtr child, int index);
         [DllImport(YogaDll, EntryPoint = "FlexUi_NodeRemoveChild")] public static extern void YGNodeRemoveChild(IntPtr node, IntPtr child);
         [DllImport(YogaDll, EntryPoint = "FlexUi_NodeRemoveAllChildren")] public static extern void YGNodeRemoveAllChildren(IntPtr node);
+        [DllImport(YogaDll, EntryPoint = "FlexUi_NodeGetChildCount")] public static extern int YGNodeGetChildCount(IntPtr node);
 
         [DllImport(YogaDll, EntryPoint = "FlexUi_NodeSetConfig")] public static extern string YGNodeSetConfig(IntPtr node, IntPtr config);
+
+        [DllImport(YogaDll, EntryPoint = "FlexUi_NodeSetContext")] public static extern void YGNodeSetContext(IntPtr node, IntPtr context);
+        [DllImport(YogaDll, EntryPoint = "FlexUi_NodeGetContext")] public static extern IntPtr YGNodeGetContext(IntPtr node);
+        [DllImport(YogaDll, EntryPoint = "FlexUi_NodeSetMeasureFunc")] public static extern void YGNodeSetMeasureFunc(IntPtr node, IntPtr measureFunc);
+        [DllImport(YogaDll, EntryPoint = "FlexUi_NodeHasMeasureFunc")] public static extern bool YGNodeHasMeasureFunc(IntPtr node);
+        [DllImport(YogaDll, EntryPoint = "FlexUi_NodeSetDirty")] public static extern void YGNodeSetDirty(IntPtr node);
+
+        public delegate Vector2 YGMeasureFunc(IntPtr nodePtr, float width, MeasureMode widthMode, float height, MeasureMode heightMode);
+        public static void YGNodeSetMeasureFunc(IntPtr node, YGMeasureFunc measureFunc)
+        {
+            YGNodeSetMeasureFunc(node, Marshal.GetFunctionPointerForDelegate(measureFunc));
+        }
 
         #endregion
 

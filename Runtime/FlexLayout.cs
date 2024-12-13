@@ -1,8 +1,12 @@
+using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
+using AOT;
 using Gilzoide.FlexUi.Yoga;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 namespace Gilzoide.FlexUi
 {
@@ -442,6 +446,7 @@ namespace Gilzoide.FlexUi
                 if (_layoutNode.IsNull)
                 {
                     _layoutNode.Instantiate();
+                    UpdateNodeMeasure();
                     UpdateNodeStyle();
                     RefreshRootLayout();
                 }
@@ -490,7 +495,17 @@ namespace Gilzoide.FlexUi
         protected override void OnRectTransformDimensionsChange()
         {
             base.OnRectTransformDimensionsChange();
-            if (IsActive() && IsRootLayoutNode)
+            if (!IsActive())
+            {
+                return;
+            }
+
+            if (LayoutNode.HasMeasureFunc())
+            {
+                LayoutNode.SetDirty();
+                RefreshRootLayout();
+            }
+            else if (IsRootLayoutNode && !_isRefreshScheduled)
             {
                 RefreshLayout();
             }
@@ -601,6 +616,20 @@ namespace Gilzoide.FlexUi
             // gap
             layoutNode.StyleSetGap(Gutter.Column, _gapColumn);
             layoutNode.StyleSetGap(Gutter.Row, _gapRow);
+        }
+
+        protected void UpdateNodeMeasure()
+        {
+            if (_layoutNode.GetChildCount() == 0 && TryGetComponent(out ILayoutElement _))
+            {
+                _layoutNode.SetContext(RectTransform);
+                _layoutNode.SetMeasureFunc(RectTransformMeasureFuncPtr);
+            }
+            else
+            {
+                _layoutNode.SetContext(default);
+                _layoutNode.SetMeasureFunc(IntPtr.Zero);
+            }
         }
 
         protected void RefreshParent()
@@ -725,5 +754,40 @@ namespace Gilzoide.FlexUi
             }
         }
 #endif
+
+        [MonoPInvokeCallback(typeof(Yoga.Yoga.YGMeasureFunc))]
+        private static Vector2 RectTransformMeasureFunc(IntPtr nodePtr, float width, MeasureMode widthMode, float height, MeasureMode heightMode)
+        {
+            var node = new YGNode(nodePtr);
+            RectTransform rectTransform = node.GetContext<RectTransform>();
+            switch (widthMode)
+            {
+                case MeasureMode.Undefined:
+                    width = LayoutUtility.GetPreferredWidth(rectTransform);
+                    break;
+
+                case MeasureMode.AtMost:
+                    width = Mathf.Min(width, LayoutUtility.GetPreferredWidth(rectTransform));
+                    break;
+
+                default:
+                    break;
+            }
+            switch (heightMode)
+            {
+                case MeasureMode.Undefined:
+                    height = LayoutUtility.GetPreferredHeight(rectTransform);
+                    break;
+
+                case MeasureMode.AtMost:
+                    height = Mathf.Min(height, LayoutUtility.GetPreferredHeight(rectTransform));
+                    break;
+
+                default:
+                    break;
+            }
+            return new Vector2(width, height);
+        }
+        private static readonly IntPtr RectTransformMeasureFuncPtr = Marshal.GetFunctionPointerForDelegate<Yoga.Yoga.YGMeasureFunc>(RectTransformMeasureFunc);
     }
 }

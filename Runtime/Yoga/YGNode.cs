@@ -1,4 +1,5 @@
 using System;
+using System.Runtime.InteropServices;
 using UnityEngine;
 
 namespace Gilzoide.FlexUi.Yoga
@@ -8,6 +9,11 @@ namespace Gilzoide.FlexUi.Yoga
         internal IntPtr _nodePtr;
 
         public bool IsNull => _nodePtr == IntPtr.Zero;
+
+        internal YGNode(IntPtr nodePtr)
+        {
+            _nodePtr = nodePtr;
+        }
 
         public void Instantiate()
         {
@@ -253,6 +259,11 @@ namespace Gilzoide.FlexUi.Yoga
 
         public void Free()
         {
+            GCHandle ctx = GetContext();
+            if (ctx.IsAllocated)
+            {
+                ctx.Free();
+            }
             Yoga.YGNodeFree(_nodePtr);
         }
 
@@ -263,6 +274,10 @@ namespace Gilzoide.FlexUi.Yoga
 
         public bool InsertChild(YGNode child, int index)
         {
+            // Nodes with children cannot have measure functions
+            SetContext(default);
+            SetMeasureFunc(IntPtr.Zero);
+
             string error = Yoga.YGNodeInsertChild(_nodePtr, child._nodePtr, index);
             if (error != null)
             {
@@ -283,12 +298,67 @@ namespace Gilzoide.FlexUi.Yoga
             Yoga.YGNodeRemoveAllChildren(_nodePtr);
         }
 
+        public int GetChildCount()
+        {
+            return Yoga.YGNodeGetChildCount(_nodePtr);
+        }
+
         public void SetConfig(YGConfig config)
         {
             string error = Yoga.YGNodeSetConfig(_nodePtr, config._configPtr);
             if (error != null)
             {
                 Debug.LogError(error);
+            }
+        }
+
+        public void SetContext<T>(T value)
+        {
+            SetContext(GCHandle.Alloc(value));
+        }
+
+        public void SetContext(GCHandle value)
+        {
+            GCHandle ctx = GetContext();
+            if (ctx.IsAllocated)
+            {
+                ctx.Free();
+            }
+            Yoga.YGNodeSetContext(_nodePtr, GCHandle.ToIntPtr(value));
+        }
+
+        public T GetContext<T>()
+        {
+            GCHandle handle = GetContext();
+            return handle.IsAllocated ? (T) handle.Target : default;
+        }
+
+        public GCHandle GetContext()
+        {
+            IntPtr ptr = Yoga.YGNodeGetContext(_nodePtr);
+            return ptr != IntPtr.Zero ? GCHandle.FromIntPtr(ptr) : default;
+        }
+
+        public void SetMeasureFunc(Yoga.YGMeasureFunc measureFunc)
+        {
+            Yoga.YGNodeSetMeasureFunc(_nodePtr, measureFunc);
+        }
+
+        public void SetMeasureFunc(IntPtr measureFunc)
+        {
+            Yoga.YGNodeSetMeasureFunc(_nodePtr, measureFunc);
+        }
+
+        public bool HasMeasureFunc()
+        {
+            return Yoga.YGNodeHasMeasureFunc(_nodePtr);
+        }
+
+        public void SetDirty()
+        {
+            if (HasMeasureFunc())
+            {
+                Yoga.YGNodeSetDirty(_nodePtr);
             }
         }
 

@@ -95,6 +95,10 @@ EXPORT void FlexUi_NodeRemoveAllChildren(YGNodeRef node) {
 	YGNodeRemoveAllChildren(node);
 }
 
+EXPORT int FlexUi_NodeGetChildCount(YGNodeConstRef node) {
+	return YGNodeGetChildCount(node);
+}
+
 EXPORT const char *FlexUi_NodeSetConfig(YGNodeRef node, YGConfigRef config) {
 	try {
 		YGNodeSetConfig(node, config);
@@ -103,6 +107,26 @@ EXPORT const char *FlexUi_NodeSetConfig(YGNodeRef node, YGConfigRef config) {
 	catch (std::logic_error err) {
 		return strdup(err.what());
 	}
+}
+
+EXPORT void FlexUi_NodeSetContext(YGNodeRef node, void* context) {
+	YGNodeSetContext(node, context);
+}
+
+EXPORT void *FlexUi_NodeGetContext(YGNodeRef node) {
+	return YGNodeGetContext(node);
+}
+
+EXPORT void FlexUi_NodeSetMeasureFunc(YGNodeRef node, YGMeasureFunc measureFunc) {
+	YGNodeSetMeasureFunc(node, measureFunc);
+}
+
+EXPORT bool FlexUi_NodeHasMeasureFunc(YGNodeRef node) {
+	return YGNodeHasMeasureFunc(node);
+}
+
+EXPORT void FlexUi_NodeSetDirty(YGNodeRef node) {
+	YGNodeMarkDirty(node);
 }
 
 EXPORT float FlexUi_NodeLayoutGetLeft(YGNodeConstRef node) {

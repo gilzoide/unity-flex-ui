@@ -111,10 +111,10 @@ all-webgl: webgl
 
 # Dockerized builds
 docker-all-linux:
-	docker build -f src~/Dockerfile.build.linux -t gilzoide-flex-ui-build-linux:latest src~
+	docker build -f src~/Dockerfile.build.linux --platform=linux/amd64 -t gilzoide-flex-ui-build-linux:latest src~
 	docker run --rm -v "$(CURDIR)":/src -w /src --platform=linux/amd64 gilzoide-flex-ui-build-linux:latest make all-linux
 docker-all-android:
-	docker build -f src~/Dockerfile.build.android -t gilzoide-flex-ui-build-android:latest src~
+	docker build -f src~/Dockerfile.build.android --platform=linux/amd64 -t gilzoide-flex-ui-build-android:latest src~
 	docker run --rm -v "$(CURDIR)":/src -w /src --platform=linux/amd64 gilzoide-flex-ui-build-android:latest make all-android
 docker-all-windows:
 	docker build -f src~/Dockerfile.build.windows -t gilzoide-flex-ui-build-windows:latest src~
