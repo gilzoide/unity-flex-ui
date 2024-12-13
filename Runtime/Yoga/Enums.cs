@@ -133,4 +133,11 @@ namespace Gilzoide.FlexUi.Yoga
         Wrap,
         WrapReverse,
     }
+
+    public enum MeasureMode
+    {
+        Undefined,
+        Exactly,
+        AtMost,
+    }
 }
