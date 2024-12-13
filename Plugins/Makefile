@@ -2,6 +2,8 @@ STRIP ?= strip
 EMCXX ?= em++
 SED ?= sed
 ANDROID_NDK_ROOT ?=
+CODESIGN ?= codesign
+MACOS_CODESIGN_SIGNATURE ?=
 
 LINKFLAGS += -shared
 CXXFLAGS += -Iyoga~ -std=c++20 -fvisibility=hidden
@@ -35,6 +37,9 @@ $(BUILD_DIRS):
 	$(CXX) -o $@ $< $(CXXFLAGS) $(LINKFLAGS)
 	install_name_tool -id @rpath/$(@F) $@
 	$(STRIP) -x $@
+ifdef MACOS_CODESIGN_SIGNATURE
+	[[ "$@" == *"/macos/"* ]] && $(CODESIGN) -s "$(MACOS_CODESIGN_SIGNATURE)" $@ || true
+endif
 
 # macOS
 build/macos/libflex-ui.dylib: CXXFLAGS += -arch x86_64 -arch arm64
