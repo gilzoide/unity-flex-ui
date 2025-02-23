@@ -1,12 +1,16 @@
 STRIP ?= strip
-EMCXX ?= em++
 SED ?= sed
+# WebGL toolchain
+EMAR ?= emar
+EMCXX ?= em++
+# Android setup
 ANDROID_NDK_ROOT ?=
+# macOS
 CODESIGN ?= codesign
 MACOS_CODESIGN_SIGNATURE ?=
 
 LINKFLAGS += -shared
-CXXFLAGS += -Iyoga~ -std=c++20 -fvisibility=hidden
+CXXFLAGS += -std=c++20 -fvisibility=hidden
 ifeq ($(DEBUG),1)
 	CXXFLAGS += -O0 -g
 else
@@ -16,7 +20,7 @@ endif
 BUILD_DIRS = \
 	build/windows/x86_64 build/windows/x86 \
 	build/linux/x86_64 \
-	build/macos build/ios build/tvos build/visionos \
+	build/macos \
 	build/android/arm64 build/android/arm32 build/android/x86 build/android/x86_64 \
 	build/webgl
 
@@ -24,16 +28,29 @@ BUILD_DIRS = \
 $(BUILD_DIRS):
 	mkdir -p $@
 
-%/flex-ui.dll: src~/flex-ui.cpp | %
+# Requires `cpp-amalgamate`, install with `cargo install cpp-amalgamate`
+# Reference: https://github.com/Felerius/cpp-amalgamate
+#
+# The sed script prepends an underscore to all Yoga symbols to avoid symbol clashes with
+# the version of Yoga embedded within Unity, fixing iOS / tvOS / visionOS / WebGL builds.
+flex-ui-amalgamated.cpp: src~/flex-ui.cpp yoga~
+	cpp-amalgamate -d yoga~ $< | $(SED) 's/\bYG/_YG/g' > $@
+
+%/flex-ui-amalgamated.o~: flex-ui-amalgamated.cpp | %
+	$(CXX) -c -o $@ $< $(CXXFLAGS)
+%/libflex-ui.a: %/flex-ui-amalgamated.o~
+	$(AR) r $@ $<
+
+%/flex-ui.dll: flex-ui-amalgamated.cpp | %
 	$(CXX) -o $@ $< $(CXXFLAGS) $(LINKFLAGS)
 	$(STRIP) -x $@
 
 %/libflex-ui.so: CXXFLAGS += -fPIC
-%/libflex-ui.so: src~/flex-ui.cpp | %
+%/libflex-ui.so: flex-ui-amalgamated.cpp | %
 	$(CXX) -o $@ $< $(CXXFLAGS) $(LINKFLAGS)
 	$(STRIP) -x $@
 
-%/libflex-ui.dylib: src~/flex-ui.cpp | %
+%/libflex-ui.dylib: flex-ui-amalgamated.cpp | %
 	$(CXX) -o $@ $< $(CXXFLAGS) $(LINKFLAGS)
 	install_name_tool -id @rpath/$(@F) $@
 	$(STRIP) -x $@
@@ -43,15 +60,6 @@ endif
 
 # macOS
 build/macos/libflex-ui.dylib: CXXFLAGS += -arch x86_64 -arch arm64
-
-# iOS
-build/ios/libflex-ui.dylib: CXXFLAGS += -arch arm64 -isysroot $(shell xcrun --show-sdk-path --sdk iphoneos)
-
-# tvOS
-build/tvos/libflex-ui.dylib: CXXFLAGS += -arch arm64 -isysroot $(shell xcrun --show-sdk-path --sdk appletvos)
-
-# visionOS
-build/visionos/libflex-ui.dylib: CXXFLAGS += -arch arm64 -isysroot $(shell xcrun --show-sdk-path --sdk xros)
 
 # Android
 check-ndk-root:
@@ -72,13 +80,8 @@ build/android/x86/libflex-ui.so: CXX = $(wildcard $(ANDROID_NDK_ROOT)/toolchains
 build/android/x86/libflex-ui.so: check-ndk-root
 
 # WebGL
-build/webgl/libflex-ui.bc: src~/flex-ui.cpp | build/webgl
-# Workaround: prepend Yoga symbols with a '_' to avoid build errors,
-# since Unity already exports some of them (used by UI Toolkit).
-# C++ -> LLVM IR -> rename functions in text -> LLVM Bitcode
-	$(EMCXX) -c $< $(CXXFLAGS) -emit-llvm -S -o - \
-		| $(SED) -e 's/@YG/@_YG/' \
-		| $(EMCXX) -o $@ -c -emit-llvm -x ir -
+build/webgl/libflex-ui.a: CXX = $(EMCXX)
+build/webgl/libflex-ui.a: AR = $(EMAR)
 
 # Targets
 windows-x86_64: build/windows/x86_64/flex-ui.dll
@@ -100,10 +103,7 @@ linux-x86_64: build/linux/x86_64/libflex-ui.so
 all-linux: linux-x86_64
 
 macos-universal: build/macos/libflex-ui.dylib
-ios-arm64: build/ios/libflex-ui.dylib
-tvos-arm64: build/tvos/libflex-ui.dylib
-visionos-arm64: build/visionos/libflex-ui.dylib
-all-apple: macos-universal ios-arm64 tvos-arm64 visionos-arm64
+all-apple: macos-universal
 
 android-arm64: build/android/arm64/libflex-ui.so
 android-arm32: build/android/arm32/libflex-ui.so
@@ -111,7 +111,7 @@ android-x86_64: build/android/x86_64/libflex-ui.so
 android-x86: build/android/x86/libflex-ui.so
 all-android: android-arm64 android-arm32 android-x86_64 android-x86
 
-webgl: build/webgl/libflex-ui.bc
+webgl: build/webgl/libflex-ui.a
 all-webgl: webgl
 
 # Dockerized builds
