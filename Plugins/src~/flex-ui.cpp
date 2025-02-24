@@ -96,7 +96,7 @@ EXPORT void FlexUi_NodeRemoveAllChildren(YGNodeRef node) {
 }
 
 EXPORT int FlexUi_NodeGetChildCount(YGNodeConstRef node) {
-	return YGNodeGetChildCount(node);
+	return (int) YGNodeGetChildCount(node);
 }
 
 EXPORT const char *FlexUi_NodeSetConfig(YGNodeRef node, YGConfigRef config) {
