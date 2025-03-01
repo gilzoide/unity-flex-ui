@@ -80,6 +80,7 @@ build/android/x86/libflex-ui.so: CXX = $(wildcard $(ANDROID_NDK_ROOT)/toolchains
 build/android/x86/libflex-ui.so: check-ndk-root
 
 # WebGL
+build/webgl/libflex-ui.a: CXXFLAGS += -fno-exceptions
 build/webgl/libflex-ui.a: CXX = $(EMCXX)
 build/webgl/libflex-ui.a: AR = $(EMAR)
 
@@ -125,5 +126,5 @@ docker-all-windows:
 	docker build -f src~/Dockerfile.build.windows -t gilzoide-flex-ui-build-windows:latest src~
 	docker run --rm -v "$(CURDIR)":/src -w /src gilzoide-flex-ui-build-windows:latest make all-windows-mingw
 docker-all-webgl:
-	docker build -f src~/Dockerfile.build.webgl -t gilzoide-flex-ui-build-webgl:latest src~
-	docker run --rm -v "$(CURDIR)":/src -w /src gilzoide-flex-ui-build-webgl:latest make all-webgl
+	docker build -f src~/Dockerfile.build.webgl --platform=linux/amd64 -t gilzoide-flex-ui-build-webgl:latest src~
+	docker run --rm -v "$(CURDIR)":/src -w /src --platform=linux/amd64 gilzoide-flex-ui-build-webgl:latest make all-webgl
