@@ -36,7 +36,14 @@
 ///////////////////////////////////////////////////////////
 #define EXPORT __attribute__((visibility("default")))
 
+#ifdef __cpp_exceptions
 #include <stdexcept>
+#define TRY(body) try body
+#define CATCH(exception, body) catch(exception) body
+#else
+#define TRY(body) body
+#define CATCH(exception, body)
+#endif
 
 extern "C" {
 
@@ -78,13 +85,13 @@ EXPORT void FlexUi_NodeCalculateLayout(YGNodeRef node, float availableWidth, flo
 }
 
 EXPORT const char *FlexUi_NodeInsertChild(YGNodeRef node, YGNodeRef child, int index) {
-	try {
+	TRY({
 		YGNodeInsertChild(node, child, index);
 		return NULL;
-	}
-	catch (std::logic_error err) {
+	})
+	CATCH(std::logic_error err, {
 		return strdup(err.what());
-	}
+	})
 }
 
 EXPORT void FlexUi_NodeRemoveChild(YGNodeRef node, YGNodeRef child) {
@@ -100,13 +107,13 @@ EXPORT int FlexUi_NodeGetChildCount(YGNodeConstRef node) {
 }
 
 EXPORT const char *FlexUi_NodeSetConfig(YGNodeRef node, YGConfigRef config) {
-	try {
+	TRY({
 		YGNodeSetConfig(node, config);
 		return NULL;
-	}
-	catch (std::logic_error err) {
+	})
+	CATCH(std::logic_error err, {
 		return strdup(err.what());
-	}
+	})
 }
 
 EXPORT void FlexUi_NodeSetContext(YGNodeRef node, void* context) {
