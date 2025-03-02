@@ -1,7 +1,7 @@
 {
   "name": "com.gilzoide.flex-ui",
   "displayName": "Flex UI",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "description": "Flexbox support for Unity UI using the Yoga layout engine",
   "homepage": "https://github.com/gilzoide/unity-flex-ui",
   "license": "Unlicense",
