@@ -9,7 +9,7 @@ namespace Gilzoide.FlexUi
         [Tooltip("If true, this configuration will be used by FlexLayout nodes that do not have a configuration set explicitly.")]
         [SerializeField] private bool _isDefaultConfig = false;
 
-        [Tooltip("Yoga will by deafult round final layout positions and dimensions to the nearst point.\n"
+        [Tooltip("Yoga will by default round final layout positions and dimensions to the nearst point.\n"
             + "'Point Scale Factor' controls the density of the grid used for layout rounding (e.g. to round to the closest display pixel).\n"
             + "Set this to 0 to avoid rounding the layout results.")]
         [SerializeField, Min(0)] private float _pointScaleFactor = 1f;
