@@ -483,11 +483,21 @@ namespace Gilzoide.FlexUi
         protected override void OnTransformParentChanged()
         {
             base.OnTransformParentChanged();
+            if (!IsActive())
+            {
+                return;
+            }
+
             RefreshParent();
         }
 
         protected virtual void OnTransformChildrenChanged()
         {
+            if (!IsActive())
+            {
+                return;
+            }
+
             ClearTrackedChildren();
             RefreshChildren();
         }
